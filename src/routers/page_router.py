@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, Response
+from fastapi import APIRouter, Depends, Request
 from src.database.core import get_db
 from src.services.ticket_service import * 
 from fastapi.templating import Jinja2Templates
@@ -8,7 +8,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 @router.get("/", tags=["Pages"])
-async def view_all_tickets(req: Request, db: Session = Depends(get_db)):
+async def home(req: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         request=req, name="/pages/home_page.html", context={"page": "/"}
     )
