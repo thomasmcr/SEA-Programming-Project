@@ -2,7 +2,7 @@ from src.database.models import AuthSession, User
 from sqlalchemy.orm import Session
 from typing import Optional
 
-def post_user(username: str, passworD: str, db: Session):
+def post_user(username: str, password: str, db: Session):
     pass
     
 def get_user(username: str, password: str, db: Session) -> Optional[User]:

@@ -22,5 +22,5 @@ async def login(login_request: LoginRequest, req: Request, res: Response, db: Se
 
 
 @router.post("/register", tags=["User"])
-async def register(req: Request, db: Session = Depends(get_db)):
+async def register(db: Session = Depends(get_db)):
    return {"message": "not implemented yet!"}

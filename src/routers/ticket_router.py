@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, Request
 from src.database.core import get_db
-from src.database.models import Ticket
 from src.services.ticket_service import *
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -9,7 +8,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 @router.get("/tickets", tags=["Ticket"])
-async def get_tickets(request: Request, db: Session = Depends(get_db)):
+async def get_tickets(req: Request, db: Session = Depends(get_db)):
     return get_all_tickets(db)
 
 @router.post("/tickets", tags=["Ticket"])
