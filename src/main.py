@@ -1,8 +1,7 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from src.routers import ticket_router, pages_router
-from src.database.core import get_db
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")

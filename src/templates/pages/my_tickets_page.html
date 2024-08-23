@@ -2,5 +2,7 @@
 {% block title %}Hello World{% endblock %}
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
-    <h1>Hello World!</h1>
+    {% for ticket in tickets %}
+        {% include "/components/ticket.html" %}
+    {% endfor %}
 {% endblock %}
