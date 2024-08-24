@@ -3,7 +3,7 @@ from src.database.core import get_db
 from src.services.ticket_service import * 
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from src.dependencies.check_auth import check_auth
+from src.dependencies.check_auth_page import check_auth_page
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -14,7 +14,7 @@ async def home(req: Request, db: Session = Depends(get_db)):
         request=req, name="/pages/home.html", context={"page": "/"}
     )
 
-@router.get("/my-tickets-page", tags=["Pages"])
+@router.get("/my-tickets-page", tags=["Pages"], dependencies=[Depends(check_auth_page)])
 async def view_my_tickets(req: Request, db: Session = Depends(get_db)):
     tickets = get_all_tickets(db)
     return templates.TemplateResponse(
@@ -22,7 +22,7 @@ async def view_my_tickets(req: Request, db: Session = Depends(get_db)):
     )
 
 @router.get("/unauthorised-page", tags=["Pages"])
-async def unauthorised(req: Request, db: Session = Depends(get_db)):
+async def view_my_tickets(req: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         request=req, name="/pages/unauthorised.html", context={"page": "/unauthorised"}
     )

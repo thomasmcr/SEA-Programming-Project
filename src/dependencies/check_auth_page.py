@@ -5,18 +5,16 @@ from src.database.models import AuthSession
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-async def check_auth(request: Request, db: Session = Depends(get_db)):
+class AuthRedirect(Exception):
+    def __init__(self, name: str = "AuthRedirect"):
+        self.name = name
+
+async def check_auth_page(request: Request, db: Session = Depends(get_db)):
     session_id = request.cookies.get("sessionId") or ""
     session: AuthSession = get_auth_session(db, session_id)
     if not session: 
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Session token not found"
-        )
+        raise AuthRedirect()
     else: 
         if session.expiry_datetime >= datetime.now():
-            raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Session token expired"
-        )
+            raise AuthRedirect()
 
