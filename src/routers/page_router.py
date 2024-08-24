@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Query, Request
 from src.database.core import get_db
 from src.services.ticket_service import * 
 from fastapi.templating import Jinja2Templates
@@ -18,11 +18,11 @@ async def home(req: Request, db: Session = Depends(get_db)):
 async def view_my_tickets(req: Request, db: Session = Depends(get_db)):
     tickets = get_all_tickets(db)
     return templates.TemplateResponse(
-        request=req, name="/pages/my_tickets.html", context={"page": "/my-tickets", "tickets": tickets}
+        request=req, name="/pages/my_tickets.html", context={"page": "/my-tickets-page", "tickets": tickets}
     )
 
 @router.get("/unauthorised-page", tags=["Pages"])
-async def view_my_tickets(req: Request, db: Session = Depends(get_db)):
+async def unauthorised(req: Request, old_location: str = Query("old_location"), db: Session = Depends(get_db)):
     return templates.TemplateResponse(
-        request=req, name="/pages/unauthorised.html", context={"page": "/unauthorised"}
+        request=req, name="/pages/unauthorised.html", context={"page": old_location}
     )
