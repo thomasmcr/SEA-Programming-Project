@@ -8,13 +8,19 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 @router.get("/tickets", tags=["Ticket"])
-async def get_tickets(req: Request, db: Session = Depends(get_db)):
+async def get(req: Request, db: Session = Depends(get_db)):
     return get_all_tickets(db)
 
 @router.post("/tickets", tags=["Ticket"])
-async def post_ticket(title: str, content: str, request: Request, db: Session = Depends(get_db)):
+async def post(title: str, content: str, request: Request, db: Session = Depends(get_db)):
     post_ticket(db, title, content)
     return {"message": "Succesfully added ticket."}
+
+@router.delete("/tickets", tags=["Ticket"])
+async def delete(id: str, request: Request, db: Session = Depends(get_db)):
+    delete_ticket(db, id)
+    return {"message": "Succesfully deleted ticket."}
+
 
 
 
