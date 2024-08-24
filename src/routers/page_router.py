@@ -21,12 +21,6 @@ async def view_my_tickets(req: Request, db: Session = Depends(get_db)):
         request=req, name="/pages/my_tickets.html", context={"page": "/my-tickets", "tickets": tickets}
     )
 
-@router.get("/login-page", tags=["Pages"])
-async def login(req: Request, db: Session = Depends(get_db)):
-    return templates.TemplateResponse(
-        request=req, name="/pages/login.html", context={"page": "/login"}
-    )
-
 @router.get("/unauthorised-page", tags=["Pages"])
 async def unauthorised(req: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(

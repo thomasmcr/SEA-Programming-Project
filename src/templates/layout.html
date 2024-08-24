@@ -23,18 +23,22 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link {% if page == '/' %}active{% endif %}" aria-current="page" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link {% if page == '/my-tickets' %}active{% endif %}" aria-current="page" href="/my-tickets-page">My Tickets</a></li>
-                    <li class="nav-item" id="login"><a class="nav-link {% if page == '/login' %}active{% endif %}" aria-current="page" href="/login-page">Login</a></li>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link {% if page == '/' %}active{% endif %}" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link {% if page == '/my-tickets' %}active{% endif %}" href="/my-tickets-page">My Tickets</a></li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item" id="login"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <div id="content">{% block content %}{% endblock %}</div>
+    <div id="modals">{% block modals %}{% include "components/login_modal.html" %}{% endblock %}</div>
     <div id="footer" style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--secondary); text-align: center;">
         {% block footer %}Footer{% endblock %}
     </div>
+
     {% block javascript %}
     <script>
         cookie = document.cookie.indexOf("sessionId");
