@@ -27,7 +27,7 @@ async def logout(req: Request, res: Response, sessionId: str = Cookie(None), db:
     if not deleted_session:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Session with with id not found" #TODO: return the actual id in the message
+            detail="Session with id: {id} not found.".format(id=sessionId)
         )
     res.delete_cookie("sessionId")
     return {"message": "succesfully logged out."}
