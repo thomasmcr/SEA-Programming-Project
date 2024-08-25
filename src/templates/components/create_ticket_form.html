@@ -1,6 +1,6 @@
 <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#createTicketCollapse"
-    aria-expanded="true" aria-controls="createTicketCollapse">
-    Create Ticket
+    aria-expanded="true" aria-controls="createTicketCollapse" id="createTicketButton">
+    Create Ticket (Hide)
 </button>
 <div class="collapse show" id="createTicketCollapse">
     <div class="card w-75" style="margin: 20px">
@@ -49,5 +49,16 @@
         }).catch(error => {
             console.log(error)
         })
+    });
+
+    const createTicketButton = document.getElementById('createTicketButton');
+    const createTicketCollapse = document.getElementById('createTicketCollapse');
+
+    createTicketCollapse.addEventListener('show.bs.collapse', function() {
+        createTicketButton.textContent = 'Create Ticket (Hide)';
+    });
+
+    createTicketCollapse.addEventListener('hide.bs.collapse', function() {
+        createTicketButton.textContent = 'Create Ticket (Show)';
     });
 </script>

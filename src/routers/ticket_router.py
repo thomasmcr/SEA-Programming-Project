@@ -10,9 +10,9 @@ from src.dependencies.check_auth import check_auth
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-@router.get("/tickets", tags=["Ticket"], dependencies=[Depends(check_auth)])
-async def get(req: Request, db: Session = Depends(get_db)):
-    return get_all_tickets(db)
+@router.get("/tickets", tags=["Ticket"])
+async def get(req: Request, authSession: AuthSession = Depends(check_auth), db: Session = Depends(get_db)):
+    return get_user_tickets(db, authSession.user_id)
 
 @router.post("/tickets", tags=["Ticket"], dependencies=[Depends(check_auth)])
 async def post(postTicketRequest: PostTicketRequest, request: Request, authSession = Depends(check_auth), db: Session = Depends(get_db)):
@@ -27,8 +27,21 @@ async def delete(id: str, request: Request, authSession: AuthSession = Depends(c
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Ticket with id: {id} not found.".format(id=deleted_ticket.id)
+            detail='Ticket with id: ${id} not found.'
         )
+    
+@router.post("/tickets/resolve", tags=["Ticket"])
+async def toggle_resolve(id: str, request: Request, authSession: AuthSession = Depends(check_auth), db: Session = Depends(get_db)):
+    resolved_ticket = resolve_user_ticket(db, id, authSession.user_id)
+    if(resolved_ticket):
+        return {"message": "Succesfully resolved ticket."}
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Ticket with id: ${id} not found.'
+        )
+
+
     
 
 
