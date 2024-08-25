@@ -11,7 +11,7 @@
 <script>
     function deleteTicket(id)
     {   
-        fetch(`/tickets?id=${id}`, {
+        fetch(`/tickets/${id}`, {
             method: "DELETE"
         }).then(response => {
             if (response.ok) {
@@ -31,7 +31,7 @@
 
     function resolveTicket(id)
     {   
-        fetch(`/tickets/resolve?id=${id}`, {
+        fetch(`/tickets/resolve/${id}`, {
             method: "POST"
         }).then(response => {
             if (response.ok) {

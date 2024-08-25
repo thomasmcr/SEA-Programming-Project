@@ -1,21 +1,23 @@
-from typing import Optional
-
+from typing import List, Optional
+from sqlalchemy.orm import Session
 from sqlalchemy import case
 from src.database.models import Ticket
-from sqlalchemy.orm import Session
 
-def get_all_tickets(db: Session):
+def get_all_tickets(db: Session) -> List[Ticket]:
     return db.query(Ticket).all()
 
-def post_ticket(db: Session, title: str, content: str, userId: str):
+def post_ticket(db: Session, title: str, content: str, userId: str) -> Ticket:
     new_ticket = Ticket(title=title, content=content, author=userId)
     db.add(new_ticket)
     db.commit()
     return new_ticket
 
 def delete_ticket(db: Session, id: str):
-    db.query(Ticket).filter(Ticket.id == id).delete()
-    db.commit()
+    ticket_to_delete = db.query(Ticket).filter(Ticket.id == id).first()
+    if ticket_to_delete: 
+        db.delete(ticket_to_delete)
+        db.commit()
+    return ticket_to_delete
 
 def get_user_tickets(db: Session, userId: str):
     return db.query(Ticket).filter(Ticket.author == userId).order_by(case((Ticket.resolved == False, 0), else_=1)).all()

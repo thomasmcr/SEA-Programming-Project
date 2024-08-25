@@ -1,11 +1,12 @@
-from src.database.models import AuthSession, User
 from sqlalchemy.orm import Session
 from typing import Optional
+from src.database.models import AuthSession, User
+
 
 def get_auth_session(db: Session, sessionId: str) -> Optional[Session]:
     return db.query(AuthSession).filter(AuthSession.id == sessionId).first()
 
-def refresh_session(user: User, db: Session):
+def refresh_session(user: User, db: Session) -> AuthSession:
     #Delete old session 
     db.query(AuthSession).filter(AuthSession.user_id == user.id).delete()
     db.commit()

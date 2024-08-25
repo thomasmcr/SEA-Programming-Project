@@ -13,25 +13,24 @@
                 <li class="nav-item"><a class="nav-link {% if page == '/my-tickets-page' %}active{% endif %}" href="/my-tickets-page">My Tickets</a></li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item" id="loginButton"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-                <li class="nav-item" id="logoutButton"><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
+                {% if not user %}
+                    <li class="nav-item" id="loginButton"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+                {% endif %}
+                {% if user %}
+                    <li class="nav-item dropdown" id="profile">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
 <script>
-    cookie = document.cookie.indexOf("sessionId");
-    loginButton = document.getElementById("loginButton");
-    logoutButton = document.getElementById("logoutButton");
-    if(cookie == -1){
-        loginButton.style.display = "block";
-        logoutButton.style.display = "none";
-    }
-    else{
-        loginButton.style.display = "none";
-        logoutButton.style.display = "block";
-    }
-
     function logout()
     {
         fetch("/logout", {
