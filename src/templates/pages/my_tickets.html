@@ -2,6 +2,7 @@
 {% block title %}My Tickets{% endblock %}
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
+    {% include "/components/create_ticket_form.html" %}
     {% for ticket in tickets %}
         {% include "/components/ticket.html" %}
     {% endfor %}

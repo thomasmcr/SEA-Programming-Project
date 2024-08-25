@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 
 @router.post("/login", tags=["User"])
 async def login(login_request: LoginRequest, req: Request, res: Response, db: Session = Depends(get_db)):
-    user = get_user(login_request.username, login_request.password, db)
+    user = get_user(db, login_request.username, login_request.password)
     if not user: 
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

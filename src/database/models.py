@@ -10,6 +10,7 @@ class Ticket(base):
     title = Column(String)
     content = Column(String)
     resolved = Column(Boolean, default=False)
+    author = Column(Integer, ForeignKey("users.id"))
 
 class User(base):
     __tablename__ = "users"

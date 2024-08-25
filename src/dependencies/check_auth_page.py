@@ -17,4 +17,5 @@ async def check_auth_page(request: Request, db: Session = Depends(get_db)):
     else: 
         if session.expiry_datetime >= datetime.now():
             raise AuthRedirect()
+    return session
 
