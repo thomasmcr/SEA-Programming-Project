@@ -17,10 +17,16 @@
     <div id="footer" style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--secondary); text-align: center;">
         {% block footer %}Footer{% endblock %}
     </div>
-    <div id="modals">{% block modals %}{% include "components/login_modal.html" %}{% endblock %}</div>
+    <div id="modals">
+        {% block modals %}
+            {% include "components/login_modal.html" %}
+            {% include "components/alerts/test_alert.html" %}
+        {% endblock %}
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {% block javascript %}
     {% endblock %}
 </body>
