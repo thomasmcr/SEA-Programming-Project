@@ -1,14 +1,8 @@
-from typing import List, Optional
+from typing import List
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import case
 from src.database.models import Ticket, User
-
-def get_all_tickets(db: Session) -> List[Ticket]:
-    return db.query(Ticket).all()
-
-def get_all_unresolved_tickets(db: Session) -> List[Ticket]:
-    return db.query(Ticket).filter(Ticket.resolved == False).all()
 
 def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
     new_ticket = Ticket(title=title, content=content, author=user_id)
@@ -52,6 +46,12 @@ def resolve_ticket(db: Session, ticket_id: str, user: User):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'Ticket with id: {ticket_id} not found.'
         )
-    
+        
 def get_user_tickets(db: Session, user_id: str) -> List[Ticket]:
     return db.query(Ticket).filter(Ticket.author == user_id).order_by(Ticket.creation_datetime.desc()).all()
+
+def get_all_tickets(db: Session) -> List[Ticket]:
+    return db.query(Ticket).all()
+
+def get_all_unresolved_tickets(db: Session, user_id: str) -> List[Ticket]:
+    return db.query(Ticket).filter(Ticket.resolved == False, Ticket.author != user_id).all()

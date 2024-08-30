@@ -3,9 +3,24 @@
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
     {% include "/components/create_ticket_form.html" %}
-    {% for ticket in tickets %}
+    <h1 style="font-size: 20px; margin-top: 20px;">Your Tickets: </h1>
+    {% if not user_tickets %}
+        <p style="font-size: 18px; margin: 20px"> It looks like you don't have any open tickets. To get started, create a ticket using the form above.</p>
+    {% endif %}
+    {% for ticket in user_tickets %}
         {% include "/components/ticket.html" %}
     {% endfor %}
+
+    {% if user.is_admin %}
+        <h1 style="font-size: 20px; margin-top: 20px;">Tickets to Review: </h1>
+        {% if not tickets_to_review %}
+            <p style="font-size: 18px; margin: 20px"> It looks like you don't have any tickets to review. Sit back and relax.</p>
+        {% endif %}
+        {% for ticket in tickets_to_review %}
+            {% include "/components/ticket.html" %}
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}
 {% block javascript %}
 <script>
@@ -16,7 +31,7 @@
                 method: "DELETE"
             }).then(response => {
                 if (response.ok) {
-                    location.replace("{{ page }}")
+                    reloadPage(); 
                 }
                 else {
                     return response.json().then(err => {
@@ -38,7 +53,7 @@
                 method: "POST"
             }).then(response => {
                 if (response.ok) {
-                    location.replace("{{ page }}")
+                    reloadPage(); 
                 }
                 else {
                     return response.json().then(err => {

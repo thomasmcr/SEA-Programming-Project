@@ -24,8 +24,9 @@
         {% endblock %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
        function confirmAction(title, callback) {
@@ -39,6 +40,18 @@
                 if(result.isConfirmed){ callback(); }
             });
         }
+    </script>
+    <script>
+        function reloadPage(preserveScroll = true){
+            if(preserveScroll){
+                localStorage.setItem("scrollY", document.documentElement.scrollTop || document.body.scrollTop);
+            }
+            location.replace("{{ page }}")
+        }
+
+        const scrollY = parseInt(localStorage.getItem("scrollY") ?? 0);
+        window.scrollTo({top: scrollY, left: 0, behavior: 'instant'});
+        localStorage.removeItem("scrollY");
     </script>
     {% block javascript %}
     {% endblock %}
