@@ -11,42 +11,46 @@
 <script>
     function deleteTicket(id)
     {   
-        fetch(`/tickets/${id}`, {
-            method: "DELETE"
-        }).then(response => {
-            if (response.ok) {
-                location.replace("{{ page }}")
-            }
-            else {
-                return response.json().then(err => {
-                    const errorMessage = `Error deleting ticket ${err.detail}` || "Create ticket failed. Please try again.";
-                    const errorElement = document.getElementById(`error-${id}`);
-                    errorElement.innerHTML = errorMessage;
-                    errorElement.style.color = "red";
-                    throw new Error(errorMessage);
-                });
-            }
-        })  
+        confirmAction("Are you sure you want to delete this ticket?", () => {
+            fetch(`/tickets/${id}`, {
+                method: "DELETE"
+            }).then(response => {
+                if (response.ok) {
+                    location.replace("{{ page }}")
+                }
+                else {
+                    return response.json().then(err => {
+                        const errorMessage = `Error deleting ticket ${err.detail}` || "Create ticket failed. Please try again.";
+                        const errorElement = document.getElementById(`error-${id}`);
+                        errorElement.innerHTML = errorMessage;
+                        errorElement.style.color = "red";
+                        throw new Error(errorMessage);
+                    });
+                }
+            }) 
+        });
     }
 
-    function resolveTicket(id)
-    {   
-        fetch(`/tickets/resolve/${id}`, {
-            method: "POST"
-        }).then(response => {
-            if (response.ok) {
-                location.replace("{{ page }}")
-            }
-            else {
-                return response.json().then(err => {
-                    const errorMessage = `Error resolving ticket ${err.detail}` || "Resolving ticket failed. Please try again.";
-                    const errorElement = document.getElementById(`error-${id}`);
-                    errorElement.innerHTML = errorMessage;
-                    errorElement.style.color = "red";
-                    throw new Error(errorMessage);
-                });
-            }
-        })  
+    async function resolveTicket(id)
+    {           
+        confirmAction("Are you sure you want to resolve this ticket?", () => {
+            fetch(`/tickets/resolve/${id}`, {
+                method: "POST"
+            }).then(response => {
+                if (response.ok) {
+                    location.replace("{{ page }}")
+                }
+                else {
+                    return response.json().then(err => {
+                        const errorMessage = `Error resolving ticket ${err.detail}` || "Resolving ticket failed. Please try again.";
+                        const errorElement = document.getElementById(`error-${id}`);
+                        errorElement.innerHTML = errorMessage;
+                        errorElement.style.color = "red";
+                        throw new Error(errorMessage);
+                    });
+                }
+            });
+        });
     }
 </script>
 {% endblock %}
