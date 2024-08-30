@@ -11,6 +11,7 @@ class Ticket(base):
     content = Column(String)
     resolved = Column(Boolean, default=False)
     author = Column(Integer, ForeignKey("users.id"))
+    creation_datetime = Column(DateTime, default=lambda: datetime.utcnow())
 
 class User(base):
     __tablename__ = "users"

@@ -20,7 +20,7 @@ def delete_ticket(db: Session, ticket_id: str) -> Ticket | None:
     return ticket_to_delete
 
 def get_user_tickets(db: Session, user_id: str) -> List[Ticket]:
-    return db.query(Ticket).filter(Ticket.author == user_id).order_by(case((Ticket.resolved == False, 0), else_=1)).all()
+    return db.query(Ticket).filter(Ticket.author == user_id).order_by(Ticket.creation_datetime.desc()).all()
 
 def delete_user_ticket(db: Session, ticket_id: str, user_id: str) -> Optional[Ticket]:
     ticket_to_delete = db.query(Ticket).filter(Ticket.id == ticket_id, Ticket.author == user_id).first()
