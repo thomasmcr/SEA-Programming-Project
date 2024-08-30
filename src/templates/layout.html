@@ -53,6 +53,34 @@
         window.scrollTo({top: scrollY, left: 0, behavior: 'instant'});
         localStorage.removeItem("scrollY");
     </script>
+    <script>
+        const collapseButtons = document.getElementsByClassName('collapseButton');
+        Array.prototype.forEach.call(collapseButtons, function (button) {
+            const controlledElementId = button.getAttribute('aria-controls');
+            const controlledElement = document.getElementById(controlledElementId);
+
+            const storedState = localStorage.getItem(controlledElementId);
+            if(storedState !== null){
+                if (storedState === 'true') {
+                    controlledElement.classList.add('show');
+                    button.textContent = '(Hide)';
+                } else {
+                    controlledElement.classList.remove('show');
+                    button.textContent = '(Show)';
+                }
+            }
+    
+            controlledElement.addEventListener('show.bs.collapse', function () {
+                button.textContent = '(Hide)';
+                localStorage.setItem(controlledElementId, 'true');
+            });
+    
+            controlledElement.addEventListener('hide.bs.collapse', function () {
+                button.textContent = '(Show)';
+                localStorage.setItem(controlledElementId, 'false');
+            });
+        });
+    </script>
     {% block javascript %}
     {% endblock %}
 </body>
