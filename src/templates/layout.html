@@ -34,9 +34,7 @@
                 title: title,
                 showDenyButton: true,
                 confirmButtonText: "Yes I'm sure",
-                confirmButtonColor: "var(--btn-accept)",
                 denyButtonText: "No I changed my mind",
-                denyButtonColor: "var(--btn-decline)", 
                 icon: "question"
             }).then(result => {
                 if(result.isConfirmed){ callback(); }

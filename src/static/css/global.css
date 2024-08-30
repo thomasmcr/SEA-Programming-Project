@@ -10,3 +10,13 @@
 .active {
     color: var(--secondary) !important;
 }
+
+.swal2-confirm {
+    color: #212529;
+    background-color: var(--btn-accept);
+}
+
+.swal2-deny {
+    color: #212529;
+    background-color: var(--btn-decline);
+}
