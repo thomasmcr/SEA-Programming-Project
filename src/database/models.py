@@ -19,6 +19,7 @@ class User(base):
     username = Column(String)
     password = Column(String)
     session = relationship("AuthSession", backref="user")
+    is_admin = Column(Boolean, nullable=False, default=False)
 
 class AuthSession(base):
     __tablename__ = "sessions"
