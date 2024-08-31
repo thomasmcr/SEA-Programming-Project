@@ -12,7 +12,7 @@
         class="collapseButton">(Hide)</a>:</h1>
     <div class="collapse show" id="yourTicketsCollapse">
         {% if not user_tickets %}
-        <p style="font-size: 18px; margin: 20px"> It looks like you don't have any open tickets. To get started, create a ticket using the form above.</p>
+            <p style="font-size: 18px; margin: 20px"> It looks like you don't have any open tickets. To get started, create a ticket using the form above.</p>
         {% else %}
             {% for ticket in user_tickets %}
                 {% include "/components/ticket.html" %}

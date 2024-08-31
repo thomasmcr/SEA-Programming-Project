@@ -16,8 +16,8 @@ async def get(user: User = Depends(check_auth), db: Session = Depends(get_db)):
 
 @router.post("/tickets", tags=["Ticket"])
 async def post(post_ticket_request: PostTicketRequest, user: User = Depends(check_auth), db: Session = Depends(get_db)):
-    post_ticket(db, post_ticket_request.title, post_ticket_request.content, user.id)
-    return {"message": "Succesfully added ticket."}
+    new_ticket = post_ticket(db, post_ticket_request.title, post_ticket_request.content, user.id)
+    return {"message": "Succesfully added ticket.", "ticket": new_ticket}
 
 @router.delete("/tickets/{ticket_id}", tags=["Ticket"])
 async def delete(ticket_id: str, user: User = Depends(check_auth), db: Session = Depends(get_db)):

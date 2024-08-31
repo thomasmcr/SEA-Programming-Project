@@ -8,6 +8,7 @@ def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
     new_ticket = Ticket(title=title, content=content, author=user_id)
     db.add(new_ticket)
     db.commit()
+    db.refresh(new_ticket)
     return new_ticket
 
 def delete_ticket(db: Session, ticket_id: str, user: User):
