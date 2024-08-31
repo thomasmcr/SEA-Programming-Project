@@ -56,3 +56,19 @@ def get_all_tickets(db: Session) -> List[Ticket]:
 
 def get_all_unresolved_tickets(db: Session, user_id: str) -> List[Ticket]:
     return db.query(Ticket).filter(Ticket.resolved == False, Ticket.author != user_id).all()
+
+def get_ticket_by_id(db: Session, ticket_id: str, user: User):
+    ticket = db.query(Ticket).filter(Ticket.id == ticket_id).first()
+    if(ticket):
+        if(ticket.author == user.id or user.is_admin):
+            return ticket
+        else: 
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f'User with id: {user.id} is not authorised to get ticket with id: {ticket_id}.'
+            )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'Ticket with id: {ticket_id} not found.'
+        )
