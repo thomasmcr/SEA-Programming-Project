@@ -2,4 +2,4 @@
 
 ## Commands 
 
-1. To run the project in development mode, cd into the /src folder and run the command `fastapi dev main.py`
+1. To run the project in development mode, ensure you're in the src directory using the command `cd src` and run the command `fastapi dev main.py`
