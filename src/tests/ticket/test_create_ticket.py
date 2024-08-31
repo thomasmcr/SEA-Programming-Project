@@ -3,7 +3,6 @@
 from datetime import datetime
 from src.dependencies.auth_dependencies import check_auth
 from src.tests.test_main import test_client, clear_db, app, override_check_auth
-from src.tests.test_utils import add_test_ticket_to_db, get_ticket_by_id, are_objects_equal
 
 def test_create_ticket(clear_db):
     response = test_client.post(
