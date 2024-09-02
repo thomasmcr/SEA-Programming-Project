@@ -10,6 +10,8 @@ class Ticket(base):
     title = Column(String)
     content = Column(String)
     resolved = Column(Boolean, default=False)
+    author = Column(Integer, ForeignKey("users.id"))
+    creation_datetime = Column(DateTime, default=lambda: datetime.utcnow())
 
 class User(base):
     __tablename__ = "users"
@@ -17,6 +19,7 @@ class User(base):
     username = Column(String)
     password = Column(String)
     session = relationship("AuthSession", backref="user")
+    is_admin = Column(Boolean, nullable=False, default=False)
 
 class AuthSession(base):
     __tablename__ = "sessions"

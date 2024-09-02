@@ -1,5 +1,22 @@
 :root
 {
-    --primary: #1e90ff;
+    --primary: #1E90FF;
     --secondary: #E7E7E7;
+    --btn-neutral: #B3EBF2;
+    --btn-accept: #77DD77; 
+    --btn-decline: #FF6961; 
+}
+
+.active {
+    color: var(--secondary) !important;
+}
+
+.swal2-confirm {
+    color: #212529;
+    background-color: var(--btn-accept);
+}
+
+.swal2-deny {
+    color: #212529;
+    background-color: var(--btn-decline);
 }
