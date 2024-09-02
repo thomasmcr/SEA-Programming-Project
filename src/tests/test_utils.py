@@ -1,7 +1,7 @@
 
 from src.dependencies.auth_dependencies import check_auth
 from src.tests.test_main import session
-from src.database.models import Ticket
+from src.database.models import Ticket, User
 
 
 def add_test_ticket_to_db(title: str = "title", content: str = "content", author: int = 0):
@@ -10,18 +10,31 @@ def add_test_ticket_to_db(title: str = "title", content: str = "content", author
     db.add(ticket)
     db.commit()
     db.refresh(ticket)
-    db.close()
     return ticket
+
+def add_test_user_to_db(id: int, username: str, password: str, is_admin: bool = False):
+    user = User(id=id, username=username, password=password, is_admin=is_admin)
+    db = session()
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
 
 def get_ticket_by_id(ticket_id: str):
     db = session()
     return db.query(Ticket).filter(Ticket.id == ticket_id).first()
 
 def are_objects_equal(obj1, obj2, exclude_fields = []):
-    for key in obj1.__dict__.keys():
-        if key.startswith('_') or key in exclude_fields:
-            continue
+    keys1 = {key for key in obj1.__dict__.keys() if not key.startswith('_') and key not in exclude_fields}
+    keys2 = {key for key in obj2.__dict__.keys() if not key.startswith('_') and key not in exclude_fields}
+    
+    # First, check if both objects have the same set of keys (excluding any fields as specified)
+    if keys1 != keys2:
+        return False
 
+    # Now check if all values corresponding to these keys are equal
+    for key in keys1:
         if getattr(obj1, key) != getattr(obj2, key):
             return False
-    return True    
+
+    return True  

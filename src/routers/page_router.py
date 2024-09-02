@@ -7,6 +7,7 @@ from src.schemas.user_schemas import UserPublic
 from src.services.ticket_service import get_user_tickets, get_all_unresolved_tickets
 from src.database.models import User
 from src.dependencies.auth_dependencies import check_auth_redirect, get_user_public
+from src.services.user_service import get_public_users
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -29,8 +30,9 @@ async def view_my_tickets(req: Request, user_public: UserPublic = Depends(get_us
 @router.get("/admin-dashboard-page", tags=["Pages"], dependencies=[Depends(check_auth_redirect)])
 async def admin_dashboard(req: Request, user_public: UserPublic = Depends(get_user_public), db: Session = Depends(get_db)):
     if(user_public.is_admin == False): raise AuthRedirect
+    other_users_details = get_public_users(db, [user_public.id])
     return templates.TemplateResponse(
-        request=req, name="/pages/admin_dashboard.html", context={"page": "/admin-dashboard-page", "user": user_public}
+        request=req, name="/pages/admin_dashboard.html", context={"page": "/admin-dashboard-page", "user": user_public, "other_users_details": other_users_details}
     )
 
 @router.get("/unauthorised-page", tags=["Pages"])
