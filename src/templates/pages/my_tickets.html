@@ -5,16 +5,14 @@
 
     <h1 style="font-size: 20px;">Create Ticket <a data-bs-toggle="collapse" href="#createTicketCollapse"
         role="button" aria-expanded="false" aria-controls="createTicketCollapse" style="text-decoration: none;"
-        class="collapseButton">(Hide)</a>:</h1>
+        class="collapseButton"></a></h1>
     <div class="collapse show" id="createTicketCollapse">
         {% include "/components/create_ticket_form.html" %}
     </div>
-
-    <hr />
     
-    <h1 style="font-size: 20px;">Your Tickets <a data-bs-toggle="collapse" href="#yourTicketsCollapse"
+    <h1 style="font-size: 20px; margin-top: 20px;">Your Tickets <a data-bs-toggle="collapse" href="#yourTicketsCollapse"
         role="button" aria-expanded="false" aria-controls="yourTicketsCollapse" style="text-decoration: none;"
-        class="collapseButton">(Hide)</a>:</h1>
+        class="collapseButton"></a></h1>
     <div class="collapse show" id="yourTicketsCollapse">
         {% if not user_tickets %}
             <p style="font-size: 18px; margin: 20px"> It looks like you don't have any open tickets. To get started, create a ticket using the form above.</p>
@@ -26,10 +24,9 @@
     </div>
 
     {% if user.is_admin %}
-        <hr />
-        <h1 style="font-size: 20px;">Tickets to Review <a data-bs-toggle="collapse" href="#ticketsToReviewCollapse"
+        <h1 style="font-size: 20px; margin-top: 20px;">Tickets to Review <a data-bs-toggle="collapse" href="#ticketsToReviewCollapse"
             role="button" aria-expanded="false" aria-controls="ticketsToReviewCollapse" style="text-decoration: none;"
-            class="collapseButton">(Hide)</a>:</h1>
+            class="collapseButton"></a></h1>
         <div class="collapse show" id="ticketsToReviewCollapse">
             {% if not tickets_to_review %}
             <p style="font-size: 18px; margin: 20px"> It looks like you don't have any tickets to review.</p>
