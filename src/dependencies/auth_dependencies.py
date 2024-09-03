@@ -4,7 +4,7 @@ from src.schemas.user_schemas import UserPublic
 from src.services.auth_session_service import get_auth_session
 from src.services.user_service import get_user_by_id
 from src.database.models import AuthSession, User
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from src.handlers.auth_redirect_handler import AuthRedirect
 
@@ -51,7 +51,7 @@ async def check_auth_redirect(request: Request, db: Session = Depends(get_db)):
         print("Session not found.")
         raise AuthRedirect()
     else: 
-        if session.expiry_datetime >= datetime.now():
+        if session.expiry_datetime >= datetime.now(timezone.utc):
             print("Session expired.")
             raise AuthRedirect()
     user: User = get_user_by_id(db, session.user_id)

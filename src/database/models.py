@@ -1,7 +1,7 @@
 from src.database.core import base, engine
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship 
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from uuid import uuid4
 
 class Ticket(base):
@@ -11,7 +11,7 @@ class Ticket(base):
     content = Column(String)
     resolved = Column(Boolean, default=False)
     author = Column(Integer, ForeignKey("users.id"))
-    creation_datetime = Column(DateTime, default=lambda: datetime.utcnow())
+    creation_datetime = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 class User(base):
     __tablename__ = "users"
@@ -24,7 +24,7 @@ class User(base):
 class AuthSession(base):
     __tablename__ = "sessions"
     id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    expiry_datetime = Column(DateTime, default=lambda: datetime.utcnow() + timedelta(minutes=30))
+    expiry_datetime = Column(DateTime, default=lambda: datetime.now(timezone.utc) + timedelta(minutes=30))
     user_id = Column(Integer, ForeignKey("users.id"))
 
 base.metadata.create_all(bind=engine)
