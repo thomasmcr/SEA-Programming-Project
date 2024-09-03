@@ -48,11 +48,14 @@ async def check_auth_redirect(request: Request, db: Session = Depends(get_db)):
     session_id = request.cookies.get("sessionId") or ""
     session: AuthSession = get_auth_session(db, session_id)
     if not session: 
+        print("Session not found.")
         raise AuthRedirect()
     else: 
         if session.expiry_datetime >= datetime.now():
+            print("Session expired.")
             raise AuthRedirect()
     user: User = get_user_by_id(db, session.user_id)
     if not user:
+        print("User not found.")
         raise AuthRedirect()
     return user
