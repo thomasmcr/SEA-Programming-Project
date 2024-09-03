@@ -24,7 +24,6 @@ class User(base):
 class AuthSession(base):
     __tablename__ = "sessions"
     id = Column(String, primary_key=True, default=lambda: str(uuid4()))
-    expiry_datetime = Column(DateTime, default=lambda: datetime.now(timezone.utc) + timedelta(minutes=30))
     user_id = Column(Integer, ForeignKey("users.id"))
 
 base.metadata.create_all(bind=engine)
