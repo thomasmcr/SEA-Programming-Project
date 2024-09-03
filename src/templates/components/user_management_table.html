@@ -1,0 +1,23 @@
+<table class="table" style="margin-top: 20px;">
+    <thead>
+      <tr>
+        <th scope="col">#Id</th>
+        <th scope="col">Username</th>
+        <th scope="col">Is Admin</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for user in other_users_details %}
+            <tr>
+                <th scope="row"><a href="#">{{ user.id }}</a></th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.is_admin }}</td>
+                <td>
+                    <a href="#" class="btn {{ 'disabled' if user.is_admin else '' }}" style="background-color: var(--btn-accept);">Promote</a>
+                    <a href="#" class="btn" style="background-color: var(--btn-decline);">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

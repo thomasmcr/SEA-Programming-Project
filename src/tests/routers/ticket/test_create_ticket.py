@@ -13,6 +13,7 @@ def test_create_ticket(clear_db):
     data = response.json()
     ticket = data["ticket"]
     assert data["detail"] == "Succesfully added ticket."
+
     assert "id" in ticket
     assert ticket["title"] == "title"
     assert ticket["content"] == "content"

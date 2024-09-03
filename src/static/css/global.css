@@ -20,3 +20,7 @@
     color: #212529;
     background-color: var(--btn-decline);
 }
+
+td, th{
+    vertical-align: text-top;
+}
