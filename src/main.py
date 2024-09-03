@@ -6,8 +6,21 @@ from src.routers import ticket_router, page_router, user_router, auth_session_ro
 from src.dependencies.auth_dependencies import AuthRedirect
 from src.handlers import auth_redirect_handler
 from fastapi_health import health
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = ["http://127.0.0.1:8000","http://localhost:8000"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["Set-Cookie"],
+)
+
 templates = Jinja2Templates(directory="templates")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -22,3 +35,4 @@ def is_database_online(session: bool = Depends(get_db)):
 app.add_api_route("/health", health([is_database_online]))
 
 app.add_exception_handler(AuthRedirect, auth_redirect_handler.handler)
+

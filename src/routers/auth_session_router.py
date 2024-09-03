@@ -9,14 +9,14 @@ from src.schemas.user_schemas import LoginRequest
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-@router.post("/login", tags=["User"])
+@router.post("/login", tags=["Auth"])
 async def login(login_request: LoginRequest, req: Request, res: Response, db: Session = Depends(get_db)):
     user = get_user(db, login_request.username, login_request.password)
     session = refresh_session(user, db)
     res.set_cookie("sessionId", session.id)
     return {"message": "login success.", "sessionId": session.id}
 
-@router.delete("/logout", tags=["User"])
+@router.delete("/logout", tags=["Auth"])
 async def logout(req: Request, res: Response, sessionId: str = Cookie(None), db: Session = Depends(get_db)):
     deleted_session = delete_auth_session(db, sessionId)
     if not deleted_session:
