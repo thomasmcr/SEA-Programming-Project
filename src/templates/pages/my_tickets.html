@@ -68,7 +68,7 @@
         {           
             confirmAction("Are you sure you want to resolve this ticket?", () => {
                 fetch(`/tickets/resolve/${id}`, {
-                    method: "POST"
+                    method: "PUT"
                 }).then(response => {
                     if (response.ok) {
                         reloadPage(); 

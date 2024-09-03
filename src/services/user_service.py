@@ -21,3 +21,39 @@ def get_public_users(db: Session, exclude_user_ids: Optional[list[str]] = []) ->
     public_users = [UserPublic(**user.__dict__) for user in users]
     return public_users
 
+def delete_user(db: Session, user_id: str, user: User):
+    user_to_delete = db.query(User).filter(User.id == user_id).first()
+    if(user_to_delete):
+        if(user_to_delete.id == user.id or (user.is_admin and user_to_delete.is_admin == False)):
+            db.delete(user_to_delete)
+            db.commit()
+            return user_to_delete
+        else: 
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f'User with id: {user.id} is not authorised to delete user with id: {user_id}.'
+            )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'User with id: {user_id} not found.'
+        )
+
+def promote_user(db: Session, user_id: str, user: User):
+    user_to_promote = db.query(User).filter(User.id == user_id).first()
+    if(user_to_promote):
+        if(user.is_admin):
+            user_to_promote.is_admin = True
+            db.commit()
+            db.refresh(user_to_promote)
+            return user_to_promote
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f'User with id: {user.id} is not authorised to promote user with id: {user_id}.'
+            )
+    else: 
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'User with id: {user_id} not found.'
+        )

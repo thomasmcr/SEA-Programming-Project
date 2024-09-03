@@ -30,7 +30,7 @@ async def view_my_tickets(req: Request, user_public: UserPublic = Depends(get_us
 @router.get("/admin-dashboard-page", tags=["Pages"], dependencies=[Depends(check_auth_redirect)])
 async def admin_dashboard(req: Request, user_public: UserPublic = Depends(get_user_public), db: Session = Depends(get_db)):
     if(user_public.is_admin == False): raise AuthRedirect
-    other_users_details = get_public_users(db, [user_public.id])
+    other_users_details = get_public_users(db)
     return templates.TemplateResponse(
         request=req, name="/pages/admin_dashboard.html", context={"page": "/admin-dashboard-page", "user": user_public, "other_users_details": other_users_details}
     )

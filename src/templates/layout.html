@@ -20,7 +20,6 @@
     <div id="modals">
         {% block modals %}
             {% include "components/login_modal.html" %}
-            {% include "components/alerts/test_alert.html" %}
         {% endblock %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -33,9 +32,9 @@
             Swal.fire({
                 title: title,
                 showDenyButton: true,
-                confirmButtonText: "Yes I'm sure",
-                denyButtonText: "No I changed my mind",
-                icon: "question"
+                confirmButtonText: "Confirm",
+                denyButtonText: "Cancel",
+                icon: "warning"
             }).then(result => {
                 if(result.isConfirmed){ callback(); }
             });

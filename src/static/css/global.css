@@ -12,15 +12,17 @@
 }
 
 .swal2-confirm {
-    color: #212529;
+    color: var(--bs-heading-color);
+    font-family: var(--bs-body-font-family);
     background-color: var(--btn-accept);
 }
 
 .swal2-deny {
-    color: #212529;
+    color: var(--bs-heading-color);
+    font-family: var(--bs-body-font-family);
     background-color: var(--btn-decline);
 }
 
 td, th{
-    vertical-align: text-top;
+    vertical-align: middle; 
 }

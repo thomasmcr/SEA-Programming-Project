@@ -7,7 +7,7 @@ from src.tests.test_utils import add_test_ticket_to_db, get_ticket_by_id, are_ob
 
 def test_resolve_ticket(clear_db):
     added_ticket = add_test_ticket_to_db()
-    response = test_client.post(
+    response = test_client.put(
         f'/tickets/resolve/{added_ticket.id}',
     )
     assert response.status_code == 200, response.text
@@ -23,7 +23,7 @@ def test_resolve_ticket(clear_db):
 
 def test_resolve_ticket_invalid(clear_db):
     ticket_id = -1
-    response = test_client.post(
+    response = test_client.put(
         f'/tickets/resolve/{ticket_id}'
     )
     assert response.status_code == 404
@@ -33,7 +33,7 @@ def test_resolve_ticket_invalid(clear_db):
 def test_resolve_ticket_unauthorised(clear_db):
     app.dependency_overrides.pop(check_auth, None) #Remove auth override 
     added_ticket = add_test_ticket_to_db()
-    response = test_client.post(
+    response = test_client.put(
         f'/tickets/resolve/{added_ticket.id}'
     )
     app.dependency_overrides[check_auth] = override_check_auth

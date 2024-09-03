@@ -12,7 +12,7 @@ def add_test_ticket_to_db(title: str = "title", content: str = "content", author
     db.refresh(ticket)
     return ticket
 
-def add_test_user_to_db(id: int, username: str, password: str, is_admin: bool = False):
+def add_test_user_to_db(id: int = 1, username: str = "username", password: str = "password", is_admin: bool = False):
     user = User(id=id, username=username, password=password, is_admin=is_admin)
     db = session()
     db.add(user)
@@ -23,6 +23,10 @@ def add_test_user_to_db(id: int, username: str, password: str, is_admin: bool = 
 def get_ticket_by_id(ticket_id: str):
     db = session()
     return db.query(Ticket).filter(Ticket.id == ticket_id).first()
+
+def get_user_by_id(user_id: str):
+    db = session()
+    return db.query(User).filter(User.id == user_id).first()
 
 def are_objects_equal(obj1, obj2, exclude_fields = []):
     keys1 = {key for key in obj1.__dict__.keys() if not key.startswith('_') and key not in exclude_fields}
