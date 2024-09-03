@@ -16,8 +16,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"], # include additional methods as per the application demand
+    allow_headers=["Content-Type","Set-Cookie"], # include additional headers as per the application demand
     expose_headers=["Set-Cookie"],
 )
 

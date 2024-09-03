@@ -68,20 +68,20 @@
             if(storedState !== null){
                 if (storedState === "true") {
                     controlledElement.classList.add("show");
-                    button.innerHTML = '<i class="bi bi-arrow-down"></i>';
+                    button.innerHTML = '<i class="bi bi-arrow-up-circle"></i>';
                 } else {
                     controlledElement.classList.remove('show');
-                    button.innerHTML = '<i class="bi bi-arrow-left"></i>';
+                    button.innerHTML = '<i class="bi bi-arrow-down-circle"></i>';
                 }
             }
     
             controlledElement.addEventListener("show.bs.collapse", function () {
-                button.innerHTML = '<i class="bi bi-arrow-down"></i>';
+                button.innerHTML = '<i class="bi bi-arrow-up-circle"></i>';
                 localStorage.setItem(controlledElementId, "true");
             });
     
             controlledElement.addEventListener("hide.bs.collapse", function () {
-                button.innerHTML = '<i class="bi bi-arrow-left"></i>';
+                button.innerHTML = '<i class="bi bi-arrow-down-circle"></i>';
                 localStorage.setItem(controlledElementId, "false");
             });
         });
