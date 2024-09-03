@@ -2,6 +2,6 @@
 {% block title %}Home{% endblock %}
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
-    <h1>This is the admin dashboard page!</h1>
-    {{other_users_details}}
+    <h1 style="font-size: 20px;">Manage Users</h1>
+    {% include "/components/user_management_table.html" %}
 {% endblock %}
