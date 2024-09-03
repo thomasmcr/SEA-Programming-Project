@@ -5,7 +5,7 @@
     <h1>401 - Unauthorised</h1>
     <h2>You are not authorised to view this page</h2>
     {% if user %}
-        <p>Return to the <a href="/">Home Page</a></p>
+        <p>Either <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Change Accounts</a> or return to the <a href="/">Home Page</a>.</p>
     {% else %}
         <p>Either <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a> or return to the <a href="/">Home Page</a>.</p>
     {% endif %}
