@@ -36,11 +36,11 @@ async def admin_dashboard(req: Request, user_public: UserPublic = Depends(get_us
     )
 
 @router.get("/view-ticket-page/{ticket_id}", tags=["Pages"], dependencies=[Depends(check_auth_redirect)])
-async def view_ticket(req: Request, ticket_id: str, user_public: UserPublic = Depends(get_user_public), db: Session = Depends(get_db)):
+async def view_ticket(req: Request, ticket_id: str, user_public: UserPublic = Depends(get_user_public), old_location: str = Query("old_location"), db: Session = Depends(get_db)):
     ticket = get_ticket_by_id(db, ticket_id, user_public)
-    if(ticket.author != user_public.id and user_public.is_admin == False): raise AuthRedirect
+    if(ticket != None and (ticket.author != user_public.id and user_public.is_admin == False)): raise AuthRedirect
     return templates.TemplateResponse(
-        request=req, name="/pages/view_ticket.html", context={"page": f'/view-ticket-page/{ticket_id}', "user": user_public, "ticket": ticket}
+        request=req, name="/pages/view_ticket.html", context={"page": old_location, "user": user_public, "ticket": ticket }
     )
 
 @router.get("/unauthorised-page", tags=["Pages"])

@@ -3,10 +3,15 @@
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
 
-    {% include "/components/create_ticket_form.html" %}
+    <h1 style="font-size: 20px;">Create Ticket <a data-bs-toggle="collapse" href="#createTicketCollapse"
+        role="button" aria-expanded="false" aria-controls="createTicketCollapse" style="text-decoration: none;"
+        class="collapseButton">(Hide)</a>:</h1>
+    <div class="collapse show" id="createTicketCollapse">
+        {% include "/components/create_ticket_form.html" %}
+    </div>
 
-    <hr/>
-
+    <hr />
+    
     <h1 style="font-size: 20px;">Your Tickets <a data-bs-toggle="collapse" href="#yourTicketsCollapse"
         role="button" aria-expanded="false" aria-controls="yourTicketsCollapse" style="text-decoration: none;"
         class="collapseButton">(Hide)</a>:</h1>
@@ -21,9 +26,7 @@
     </div>
 
     {% if user.is_admin %}
-
-        <hr/>
-        
+        <hr />
         <h1 style="font-size: 20px;">Tickets to Review <a data-bs-toggle="collapse" href="#ticketsToReviewCollapse"
             role="button" aria-expanded="false" aria-controls="ticketsToReviewCollapse" style="text-decoration: none;"
             class="collapseButton">(Hide)</a>:</h1>
@@ -36,7 +39,6 @@
                 {% endfor %}
             {% endif %}
         </div> 
-
     {% endif %}
 
 {% endblock %}
