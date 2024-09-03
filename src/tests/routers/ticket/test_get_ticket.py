@@ -22,4 +22,4 @@ def test_get_ticket(clear_db):
     data = response.json()
     assert data["id"] == added_ticket.id
     
-
+##TODO add tests for unauthorised and invalid

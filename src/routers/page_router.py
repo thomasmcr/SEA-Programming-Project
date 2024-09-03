@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from src.database.core import get_db
 from src.handlers.auth_redirect_handler import AuthRedirect
 from src.schemas.user_schemas import UserPublic
-from src.services.ticket_service import get_user_tickets, get_all_unresolved_tickets
+from src.services.ticket_service import get_ticket_by_id, get_user_tickets, get_all_unresolved_tickets
 from src.database.models import User
 from src.dependencies.auth_dependencies import check_auth_redirect, get_user_public
 from src.services.user_service import get_public_users
@@ -33,6 +33,14 @@ async def admin_dashboard(req: Request, user_public: UserPublic = Depends(get_us
     other_users_details = get_public_users(db)
     return templates.TemplateResponse(
         request=req, name="/pages/admin_dashboard.html", context={"page": "/admin-dashboard-page", "user": user_public, "other_users_details": other_users_details}
+    )
+
+@router.get("/view-ticket-page/{ticket_id}", tags=["Pages"], dependencies=[Depends(check_auth_redirect)])
+async def view_ticket(req: Request, ticket_id: str, user_public: UserPublic = Depends(get_user_public), db: Session = Depends(get_db)):
+    ticket = get_ticket_by_id(db, ticket_id, user_public)
+    if(ticket.author != user_public.id and user_public.is_admin == False): raise AuthRedirect
+    return templates.TemplateResponse(
+        request=req, name="/pages/view_ticket.html", context={"page": f'/view-ticket-page/{ticket_id}', "user": user_public, "ticket": ticket}
     )
 
 @router.get("/unauthorised-page", tags=["Pages"])

@@ -10,7 +10,7 @@
     <tbody>
         {% for other_user in other_users_details %}
             <tr>
-                <th scope="row"><a href="#">{{ other_user.id }}</a></th>
+                <th scope="row">{{ other_user.id }}</th>
                 <td>{{ other_user.username }}<p style="display: inline; font-weight: bold;">{% if other_user.id == user.id %}&nbsp;(You){% endif %}<p></td>
                 <td>{{ other_user.is_admin }}</td>
                 <td style="padding-top: 20px;">
@@ -26,7 +26,7 @@
     function deleteUser(id)
     {   
         confirmAction("Are you sure you want to delete this user?", () => {
-            fetch(`/users/${id}`, {
+            fetch(`http://localhost:8000/users/${id}`, {
                 method: "DELETE"
             }).then(response => {
                 if (response.ok) {
@@ -48,7 +48,7 @@
     function promoteUser(id)
     {   
         confirmAction("Are you sure you want to promote this user?", () => {
-            fetch(`/users/promote/${id}`, {
+            fetch(`http://localhost:8000/users/promote/${id}`, {
                 method: "PUT"
             }).then(response => {
                 if (response.ok) {

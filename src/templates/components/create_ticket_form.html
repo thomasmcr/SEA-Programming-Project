@@ -21,13 +21,12 @@
         </div>
     </div>
 </div>
-
 <script>
     info = document.getElementById("formSubmitInfo")
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
         const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
-        fetch("/tickets", {
+        fetch("http://localhost:8000/tickets", {
             method: "POST",
             body: formData,
             headers: {

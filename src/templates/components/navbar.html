@@ -38,11 +38,11 @@
 <script>
     function logout()
     {
-        fetch("auth-sessions/logout", {
+        fetch("http://localhost:8000/auth-sessions/logout", {
             method: "DELETE", 
         }).then(response => {
             if(response.ok){
-                location.reload();
+                reloadPage();
             }
         }).catch(error => {
             console.log(error)
