@@ -48,7 +48,7 @@
     function promoteUser(id)
     {   
         confirmAction("Are you sure you want to promote this user?", () => {
-            fetch(`http://localhost:8000/users/promote/${id}`, {
+            fetch(`/users/promote/${id}`, {
                 method: "PUT"
             }).then(response => {
                 if (response.ok) {

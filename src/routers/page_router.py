@@ -40,7 +40,7 @@ async def view_ticket(req: Request, ticket_id: str, user_public: UserPublic = De
     ticket = get_ticket_by_id(db, ticket_id, user_public)
     if(ticket != None and (ticket.author != user_public.id and user_public.is_admin == False)): raise AuthRedirect
     return templates.TemplateResponse(
-        request=req, name="/pages/view_ticket.html", context={"page": old_location, "user": user_public, "ticket": ticket }
+        request=req, name="/pages/view_ticket.html", context={"page": f'/view-ticket-page/{ticket_id}', "user": user_public, "ticket": ticket }
     )
 
 @router.get("/unauthorised-page", tags=["Pages"])

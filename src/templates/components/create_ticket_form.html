@@ -1,4 +1,4 @@
-<div class="card w-75" style="margin: 20px">
+<div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
     <div class="card-body">
         <form method="post" action="/" style="display: flex; flex-wrap: wrap;" id="createTicketForm">
             <div class="mb-3" style="flex-basis: 100%;">
@@ -21,7 +21,7 @@
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
         const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
-        fetch("http://localhost:8000/tickets", {
+        fetch("/tickets", {
             method: "POST",
             body: formData,
             headers: {
