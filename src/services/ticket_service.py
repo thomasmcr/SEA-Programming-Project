@@ -1,8 +1,7 @@
 from typing import List
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
-from sqlalchemy import case
-from src.database.models import Ticket, User
+from sqlalchemy.orm import Session, joinedload
+from src.database.models import Ticket
 from src.schemas.user_schemas import UserPublic
 
 def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
@@ -11,7 +10,7 @@ def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="title and content strings cannot be blank."
         )
-    new_ticket = Ticket(title=title, content=content, author=user_id)
+    new_ticket = Ticket(title=title, content=content, author_id=user_id)
     db.add(new_ticket)
     db.commit()
     db.refresh(new_ticket)
@@ -20,7 +19,7 @@ def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
 def delete_ticket(db: Session, ticket_id: str, user: UserPublic):
     ticket_to_delete = db.query(Ticket).filter(Ticket.id == ticket_id).first()
     if(ticket_to_delete):
-        if(ticket_to_delete.author == user.id or user.is_admin):
+        if(ticket_to_delete.author_id == user.id or user.is_admin):
             db.delete(ticket_to_delete)
             db.commit()
             return ticket_to_delete
@@ -38,7 +37,7 @@ def delete_ticket(db: Session, ticket_id: str, user: UserPublic):
 def resolve_ticket(db: Session, ticket_id: str, user: UserPublic):
     ticket_to_resolve = db.query(Ticket).filter(Ticket.id == ticket_id).first()
     if(ticket_to_resolve):
-        if(ticket_to_resolve.author == user.id or user.is_admin):
+        if(ticket_to_resolve.author_id == user.id or user.is_admin):
             ticket_to_resolve.resolved = True
             db.commit()
             db.refresh(ticket_to_resolve)
@@ -55,13 +54,13 @@ def resolve_ticket(db: Session, ticket_id: str, user: UserPublic):
         )
         
 def get_user_tickets(db: Session, user_id: str) -> List[Ticket]:
-    return db.query(Ticket).filter(Ticket.author == user_id).order_by(Ticket.creation_datetime.desc()).all()
+    return db.query(Ticket).filter(Ticket.author_id == user_id).order_by(Ticket.creation_datetime.desc()).all()
 
 def get_all_tickets(db: Session) -> List[Ticket]:
     return db.query(Ticket).all()
 
 def get_all_unresolved_tickets(db: Session, user_id: str) -> List[Ticket]:
-    return db.query(Ticket).filter(Ticket.resolved == False, Ticket.author != user_id).all()
+    return db.query(Ticket).filter(Ticket.resolved == False, Ticket.author_id != user_id).all()
 
-def get_ticket_by_id(db: Session, ticket_id: str, user: UserPublic):
+def get_ticket_by_id(db: Session, ticket_id: str, user: UserPublic) -> Ticket:
     return db.query(Ticket).filter(Ticket.id == ticket_id).first()

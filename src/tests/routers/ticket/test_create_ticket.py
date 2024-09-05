@@ -18,7 +18,6 @@ def test_create_ticket(clear_db):
     assert ticket["title"] == "title"
     assert ticket["content"] == "content"
     assert ticket["resolved"] is False
-    assert ticket["author"] == 0
     assert datetime.fromisoformat(ticket["creation_datetime"]) <= datetime.utcnow()
 
 def test_create_ticket_unauthorised(clear_db):

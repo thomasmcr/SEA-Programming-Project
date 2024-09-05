@@ -10,16 +10,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = ["http://127.0.0.1:8000","http://localhost:8000"]
+# origins = ["http://127.0.0.1:8000","http://localhost:8000"]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"], # include additional methods as per the application demand
-    allow_headers=["Content-Type","Set-Cookie"], # include additional headers as per the application demand
-    expose_headers=["Set-Cookie"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"], # include additional methods as per the application demand
+#     allow_headers=["Content-Type","Set-Cookie"], # include additional headers as per the application demand
+#     expose_headers=["Set-Cookie"],
+# )
 
 templates = Jinja2Templates(directory="templates")
 

@@ -9,4 +9,4 @@ class UserPublic(BaseModel):
     username: str 
     is_admin: bool
     class Config:
-        orm_mode = True
+        from_attributes = True

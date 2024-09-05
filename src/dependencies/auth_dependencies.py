@@ -1,10 +1,8 @@
 from fastapi import Depends, HTTPException, Request, status
 from src.database.core import get_db
-from src.schemas.user_schemas import UserPublic
 from src.services.auth_session_service import get_auth_session
 from src.services.user_service import get_user_by_id
 from src.database.models import AuthSession, User
-from datetime import datetime
 from sqlalchemy.orm import Session
 from src.handlers.auth_redirect_handler import AuthRedirect
 
@@ -16,12 +14,6 @@ async def get_user(request: Request, db: Session = Depends(get_db)):
         user: User = get_user_by_id(db, session.user_id)
         return user
     return None
-
-#Gets the user but omits sensitive information 
-async def get_user_public(request: Request, user: User = Depends(get_user), db: Session = Depends(get_db)):
-    if user: 
-        return UserPublic(**user.__dict__)  
-    return None 
 
 #Used to protect routes, checks if the sessionId is valid and associated with a user, else throws an exception 
 async def check_auth(request: Request, db: Session = Depends(get_db)):

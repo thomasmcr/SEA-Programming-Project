@@ -4,8 +4,8 @@ from src.tests.test_main import session
 from src.database.models import Ticket, User
 
 
-def add_test_ticket_to_db(title: str = "title", content: str = "content", author: int = 0):
-    ticket = Ticket(title="title", content="content", author=0)
+def add_test_ticket_to_db(title: str = "title", content: str = "content"):
+    ticket = Ticket(title="title", content="content", author_id=0)
     db = session()
     db.add(ticket)
     db.commit()
