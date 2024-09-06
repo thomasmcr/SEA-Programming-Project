@@ -17,12 +17,25 @@
         </div>
         <div class="card-body">
             <p>{{ ticket.content }}</p>
-            
-            <hr class="border border-1 opacity-75" style="border-color: var(--secondary) !important;">
-            <i class="bi bi-chat" style="font-size: 20px;"></i> {{ ticket.comments|length }}
-            {% for comment in ticket.comments %}
-                {% include "/components/comment.html" %}
-            {% endfor %}
+
+            {% include "/components/create_comment_form.html" %}
+
+            <h1 style="font-size: 20px; margin-top: 20px; margin-bottom: 20px;"> 
+                <i class="bi bi-chat" style="font-size: 20px; vertical-align: text-top;"></i>&nbsp;{{ ticket.comments|length }} Comments
+                <a data-bs-toggle="collapse" href="#commentsCollapse"
+                role="button" aria-expanded="false" aria-controls="commentsCollapse" style="text-decoration: none;"
+                class="collapseButton"></a>
+            </h1>
+            <div class="collapse show" id="commentsCollapse">
+                {% for comment in ticket.comments %}
+                    <div style="margin-bottom: 10px; padding: 15px; border-radius: 10px; box-shadow: 2px 2px 5px lightgray; border: 1px solid #ddd;">
+                        <span style="font-size: 14px; font-weight: bold; color: #337ab7; margin-bottom: 5px; display: block;">
+                            {{ comment.author.username }} 
+                        </span>
+                        <span style="font-size: 14px;">{{ comment.content }}</span>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

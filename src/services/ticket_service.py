@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session, joinedload
-from src.database.models import Ticket
+from sqlalchemy.orm import Session, joinedload, with_loader_criteria
+from src.database.models import Comment, Ticket
 from src.schemas.user_schemas import UserPublic
 
 def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
@@ -46,6 +46,32 @@ def resolve_ticket(db: Session, ticket_id: str, user: UserPublic):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f'User with id: {user.id} is not authorised to resolve ticket with id: {ticket_id}.'
+            )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'Ticket with id: {ticket_id} not found.'
+        )
+    
+def add_comment(db: Session, ticket_id: str, content: str, user: UserPublic):
+    if(not content):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Content string cannot be blank."
+        )
+    
+    ticket = get_ticket_by_id(db, ticket_id, user)
+    if(ticket):
+        if(ticket.author_id == user.id or user.is_admin):
+            new_comment = Comment(content=content, ticket_id=ticket_id, author_id=user.id)
+            db.add(new_comment)
+            db.commit()
+            db.refresh(new_comment)
+            return new_comment
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f'User with id: {user.id} is not authorised to add comment to ticket with id: {ticket_id}.'
             )
     else:
         raise HTTPException(

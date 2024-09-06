@@ -1,0 +1,35 @@
+<form method="post" action="/" id="createTicketForm">
+    <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
+    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+    <p id="formSubmitInfo" style="color: red; font-style: italic;"></p>
+    <button type="submit" class="btn btn-primary" style="margin-top: 5px;">Comment</button>
+</form>
+<script>
+    info = document.getElementById("formSubmitInfo")
+    document.getElementById('createTicketForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
+        const ticketId = "{{ticket.id}}";
+        fetch(`/tickets/comment/${ticketId}`, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then(response => {
+            if (response.ok) {
+                location.replace("{{ page }}")
+            }
+            else {
+                return response.json().then(err => {
+                    const errorMessage = err.detail || "Adding comment failed. Please try again.";
+                    info.innerHTML = errorMessage;
+                    info.style.color = "red";
+                    throw new Error(errorMessage);
+                });
+            }
+        }).catch(error => {
+            console.log(error)
+        })
+    });
+</script>

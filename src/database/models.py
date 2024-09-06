@@ -14,7 +14,7 @@ class Ticket(base):
     content = Column(String)
     resolved = Column(Boolean, default=False)
     creation_datetime = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    comments = relationship("Comment", back_populates="ticket")
+    comments = relationship("Comment", back_populates="ticket", order_by="desc(Comment.creation_datetime)")
     author = relationship("User")
     author_id = Column(Integer, ForeignKey("users.id"))
 
@@ -24,6 +24,7 @@ class Ticket(base):
 class Comment(base):
     __tablename__ = "comments"
     id = Column(String, primary_key=True, default=lambda: str(uuid4()))
+    creation_datetime = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     content = Column(String)
     ticket_id = Column(String, ForeignKey("tickets.id"))
     ticket = relationship("Ticket", back_populates="comments")

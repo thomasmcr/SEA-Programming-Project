@@ -6,6 +6,9 @@ from src.schemas.user_schemas import UserPublic
 class PostTicketRequest(BaseModel):
     title: str
     content: str
+    
+class PostCommentRequest(BaseModel):
+    content: str    
 
 class CommentPublic(BaseModel):
     id: str

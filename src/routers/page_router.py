@@ -35,7 +35,7 @@ async def admin_dashboard(req: Request, user: User = Depends(get_user), db: Sess
     )
 
 @router.get("/view-ticket-page/{ticket_id}", tags=["Pages"], dependencies=[Depends(check_auth_redirect)])
-async def view_ticket(req: Request, ticket_id: str, user: User = Depends(get_user), old_location: str = Query("old_location"), db: Session = Depends(get_db)):
+async def view_ticket(req: Request, ticket_id: str, user: User = Depends(get_user), db: Session = Depends(get_db)):
     ticket = get_ticket_by_id(db, ticket_id, user.get_user_public).get_ticket_public()
     if(ticket != None and (ticket.author.id != user.id and user.is_admin == False)): raise AuthRedirect
     return templates.TemplateResponse(
