@@ -1,7 +1,7 @@
 
 from src.dependencies.auth_dependencies import check_auth
 from src.tests.test_main import session
-from src.database.models import Ticket, User
+from src.database.models import Comment, Ticket, User
 
 
 def add_test_ticket_to_db(title: str = "title", content: str = "content"):
@@ -24,9 +24,21 @@ def get_ticket_by_id(ticket_id: str):
     db = session()
     return db.query(Ticket).filter(Ticket.id == ticket_id).first()
 
+def get_comment_by_id(comment_id: str):
+    db = session()
+    return db.query(Comment).filter(Comment.id == comment_id).first()
+
 def get_user_by_id(user_id: str):
     db = session()
     return db.query(User).filter(User.id == user_id).first()
+
+def get_first_ticket():
+    db = session()
+    return db.query(Ticket).first()
+
+def get_first_comment():
+    db = session()
+    return db.query(Comment).first()
 
 def are_objects_equal(obj1, obj2, exclude_fields = []):
     keys1 = {key for key in obj1.__dict__.keys() if not key.startswith('_') and key not in exclude_fields}

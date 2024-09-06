@@ -1,7 +1,7 @@
 
 
 from src.tests.test_main import test_client, clear_db, app, override_check_auth
-from src.tests.test_utils import add_test_user_to_db, get_ticket_by_id, are_objects_equal, get_user_by_id
+from src.tests.test_utils import add_test_user_to_db, are_objects_equal, get_user_by_id
 from src.dependencies.auth_dependencies import check_auth
 
 def test_delete_user_valid(clear_db):
