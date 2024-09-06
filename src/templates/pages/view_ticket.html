@@ -7,7 +7,6 @@
     </a>
     <div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
         <div class="card-header" style="padding-top: 20px; padding-bottom: 20px;">
-            <!--Meta-data-->
             <h1 class="card-title" style="font-size: 20px;">{{ ticket.title}}</h1>
             <h2 style="font-size: 16px; ">{{ ticket.id }}</h2>
             <h3 class="card-subtitle" style="font-size: 16px; font-weight: lighter;">
@@ -17,11 +16,8 @@
             </h3>    
         </div>
         <div class="card-body">
-    
-            <!--Content-->
             <p>{{ ticket.content }}</p>
-        
-            <!--Comments-->
+            
             <hr class="border border-1 opacity-75" style="border-color: var(--secondary) !important;">
             <i class="bi bi-chat" style="font-size: 20px;"></i> {{ ticket.comments|length }}
             {% for comment in ticket.comments %}

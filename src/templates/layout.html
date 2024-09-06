@@ -34,17 +34,17 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-       function confirmAction(title, callback) {
-            Swal.fire({
-                title: title,
-                showDenyButton: true,
-                confirmButtonText: "Confirm",
-                denyButtonText: "Cancel",
-                icon: "question"
-            }).then(result => {
-                if(result.isConfirmed){ callback(); }
-            });
-        }
+        function confirmAction(title, callback) {
+                Swal.fire({
+                    title: title,
+                    showDenyButton: true,
+                    confirmButtonText: "Confirm",
+                    denyButtonText: "Cancel",
+                    icon: "question"
+                }).then(result => {
+                    if(result.isConfirmed){ callback(); }
+                });
+            }
     </script>
     <script>
         function reloadPage(preserveScroll = true){
@@ -53,7 +53,6 @@
             }
             location.replace("{{ page }}")
         }
-
         const scrollY = parseInt(localStorage.getItem("scrollY") ?? 0);
         window.scrollTo({top: scrollY, left: 0, behavior: 'instant'});
         localStorage.removeItem("scrollY");
@@ -104,6 +103,10 @@
                 timeElement.textContent = localTime;
             });
     });
+    </script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
     {% block javascript %}
     {% endblock %}

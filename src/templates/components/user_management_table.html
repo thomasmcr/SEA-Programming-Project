@@ -14,7 +14,15 @@
                 <td>{{ other_user.username }}<p style="display: inline; font-weight: bold;">{% if other_user.id == user.id %}&nbsp;(You){% endif %}<p></td>
                 <td>{{ other_user.is_admin }}</td>
                 <td style="padding-top: 20px;">
-                    <a href="#" class="btn {{ 'disabled' if other_user.is_admin else '' }}" style="background-color: var(--btn-accept);" onclick="promoteUser('{{ other_user.id }}')">Promote</a>
+                    <a 
+                        href="#" 
+                        class="btn {{ 'disabled' if other_user.is_admin else '' }}" 
+                        style="background-color: var(--btn-accept);" 
+                        onclick="promoteUser('{{ other_user.id }}')"
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="bottom"
+                        data-bs-title="Grant user admin priveliges."
+                    >Promote</a>
                     <a href="#" class="btn {{ 'disabled' if other_user.is_admin else '' }}" style="background-color: var(--btn-decline);" onclick="deleteUser('{{ other_user.id }}')">Delete</a>
                     <p id="error-{{ other_user.id }}" style="margin-top: 10px;"></p>
                 </td>
