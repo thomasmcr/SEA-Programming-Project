@@ -86,6 +86,25 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateElements = document.querySelectorAll('.utc-date');
+            const timeElements = document.querySelectorAll('.utc-time');
+            dateElements.forEach(function(dateElement) {
+                const datetimeStr = dateElement.getAttribute('data-datetime');
+                const datetime = new Date(datetimeStr);
+                const localDate = datetime.toLocaleDateString();
+                dateElement.textContent = localDate;
+            });
+    
+            timeElements.forEach(function(timeElement) {
+                const datetimeStr = timeElement.getAttribute('data-datetime');
+                const datetime = new Date(datetimeStr + " UTC");
+                const localTime = datetime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+                timeElement.textContent = localTime;
+            });
+    });
+    </script>
     {% block javascript %}
     {% endblock %}
 </body>

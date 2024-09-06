@@ -3,14 +3,30 @@
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
     <a href="/my-tickets-page" style="text-decoration: none;">
-    <i class="bi bi-arrow-return-left" style="font-style: normal;"> Exit detailed view</i>
+        <i class="bi bi-arrow-return-left" style="font-style: normal;"> Exit detailed view</i>
     </a>
-    <h1 style="font-size: 20px; margin-top: 20px;">{{ ticket.title }}</h1>
-    <h2 style="font-size: 16px;">{{ ticket.id }}</h2>
-    <h2 style="font-size: 16px;">By {{ ticket.author }}</h2>
-    <p style="margin-top: 20px">{{ ticket.content }}</p>
-    <hr class="border border-1 opacity-75" style="border-color: var(--secondary) !important;">
-    {% for comment in ticket.comments %}
-        <p>{{ comment.content }}</p>
-    {% endfor %}
+    <div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
+        <div class="card-header" style="padding-top: 20px; padding-bottom: 20px;">
+            <!--Meta-data-->
+            <h1 class="card-title" style="font-size: 20px;">{{ ticket.title}}</h1>
+            <h2 style="font-size: 16px; ">{{ ticket.id }}</h2>
+            <h3 class="card-subtitle" style="font-size: 16px; font-weight: lighter;">
+                By {{ ticket.author.username }} 
+                on <span class="utc-date" data-datetime="{{ ticket.creation_datetime }}"></span> 
+                at <span class="utc-time" data-datetime="{{ ticket.creation_datetime }}"></span>
+            </h3>    
+        </div>
+        <div class="card-body">
+    
+            <!--Content-->
+            <p>{{ ticket.content }}</p>
+        
+            <!--Comments-->
+            <hr class="border border-1 opacity-75" style="border-color: var(--secondary) !important;">
+            <i class="bi bi-chat" style="font-size: 20px;"></i> {{ ticket.comments|length }}
+            {% for comment in ticket.comments %}
+                {% include "/components/comment.html" %}
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

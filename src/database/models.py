@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from src.schemas.ticket_schemas import TicketPublic
+from src.schemas.ticket_schemas import CommentPublic, TicketPublic
 from src.schemas.user_schemas import UserPublic
 
 class Ticket(base):
@@ -27,6 +27,11 @@ class Comment(base):
     content = Column(String)
     ticket_id = Column(String, ForeignKey("tickets.id"))
     ticket = relationship("Ticket", back_populates="comments")
+    author = relationship("User")
+    author_id = Column(Integer, ForeignKey("users.id"))
+
+    def get_comment_public(self):
+        return CommentPublic.model_validate(self)
 
 class User(base):
     __tablename__ = "users"
