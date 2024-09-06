@@ -32,6 +32,14 @@ def test_create_ticket_invalid(clear_db):
     assert data["detail"] == "title and content strings cannot be blank." 
     assert get_first_ticket() == None
 
+def test_create_ticket_invalid_one(clear_db):
+    response = test_client.post(
+        "/tickets/",
+        json={},
+    )
+    assert response.status_code == 422
+    assert get_first_ticket() == None
+
 def test_create_ticket_unauthorised(clear_db):
     app.dependency_overrides.pop(check_auth, None)
     response = test_client.post(

@@ -31,6 +31,14 @@ def test_add_comment_invalid(clear_db):
     assert get_comment_by_id("-1") == None 
     assert get_first_comment() == None
 
+def test_add_comment_invalid_one(clear_db):
+    response = test_client.post(
+        "/tickets/comment/-1",
+        json={},
+    )
+    assert response.status_code == 422, response.text
+    assert get_first_comment() == None
+
 def test_add_comment_unauthorised(clear_db):
     app.dependency_overrides.pop(check_auth, None)
     response = test_client.post(
