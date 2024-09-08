@@ -3,8 +3,8 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from src.database.core import get_db
 from src.database.models import User
-from src.schemas.ticket_schemas import PostCommentRequest, PostTicketRequest
-from src.services.ticket_service import add_comment, get_user_tickets, post_ticket, resolve_ticket, delete_ticket, get_ticket_by_id
+from src.schemas.ticket_schemas import PostCommentRequest, PostTicketRequest, UpdateTicketRequest
+from src.services.ticket_service import add_comment, get_user_tickets, post_ticket, resolve_ticket, delete_ticket, get_ticket_by_id, update_ticket
 from src.dependencies.auth_dependencies import check_auth
 
 router = APIRouter()
@@ -23,6 +23,23 @@ async def post(post_ticket_request: PostTicketRequest, user: User = Depends(chec
 async def get_by_id(ticket_id: str, user: User = Depends(check_auth), db: Session = Depends(get_db)):
     return get_ticket_by_id(db, ticket_id, user)
 
+@router.put("/{ticket_id}", tags=["Ticket"])
+async def update(update_ticket_request: UpdateTicketRequest, ticket_id: str, user: User = Depends(check_auth), db: Session = Depends(get_db)):
+    if((update_ticket_request.content == None or update_ticket_request.content.isspace()) and 
+       (update_ticket_request.title == None or update_ticket_request.title.isspace())
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Both the title and content cannot be blank."
+        )
+    updated_ticket = update_ticket(db, ticket_id, update_ticket_request.title, update_ticket_request.content, user)
+    if updated_ticket:
+        return {"detail": "Succesfully updated ticket.", "ticket": updated_ticket}
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f'Failed to update ticket with id {ticket_id}. Please try again.'
+        )
 
 @router.delete("/{ticket_id}", tags=["Ticket"])
 async def delete(ticket_id: str, user: User = Depends(check_auth), db: Session = Depends(get_db)):

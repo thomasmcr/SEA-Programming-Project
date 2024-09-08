@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session, joinedload, with_loader_criteria
 from src.database.models import Comment, Ticket
@@ -48,6 +48,28 @@ def resolve_ticket(db: Session, ticket_id: str, user: UserPublic):
                 detail=f'User with id: {user.id} is not authorised to resolve ticket with id: {ticket_id}.'
             )
     else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'Ticket with id: {ticket_id} not found.'
+        )
+
+def update_ticket(db: Session, ticket_id: str, new_title: Optional[str], new_content: Optional[str], user: UserPublic):
+    ticket_to_update = db.query(Ticket).filter(Ticket.id == ticket_id).first()
+    if(ticket_to_update):
+        if(ticket_to_update.author_id == user.id or user.is_admin):
+            if(new_title):
+                ticket_to_update.title = new_title
+            if (new_content):
+                ticket_to_update.content = new_content
+            db.commit()
+            db.refresh(ticket_to_update)
+            return ticket_to_update
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f'User with id: {user.id} is not authorised to update ticket with id: {ticket_id}.'
+            )
+    else: 
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'Ticket with id: {ticket_id} not found.'

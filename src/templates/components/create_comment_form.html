@@ -1,7 +1,7 @@
 <form method="post" action="/" id="createTicketForm" style="margin-top: 20px; margin-bottom: 20px;">
     <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
     <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
-    <p id="formSubmitInfo" style="color: red; font-style: italic;"></p>
+    <p id="formSubmitInfo" style="font-style: italic;"></p>
     <button type="submit" class="btn btn-primary">Comment</button>
 </form>
 <script>

@@ -113,51 +113,6 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
-    <script>
-        function deleteTicket(id)
-        {   
-            confirmAction("Are you sure you want to delete this ticket?", () => {
-                fetch(`/tickets/${id}`, {
-                    method: "DELETE"
-                }).then(response => {
-                    if (response.ok) {
-                        reloadPage(); 
-                    }
-                    else {
-                        return response.json().then(err => {
-                            const errorMessage = `Error deleting ticket ${err.detail}` || "Create ticket failed. Please try again.";
-                            const errorElement = document.getElementById(`error-${id}`);
-                            errorElement.innerHTML = errorMessage;
-                            errorElement.style.color = "red";
-                            throw new Error(errorMessage);
-                        });
-                    }
-                }) 
-            });
-        }
-
-        async function resolveTicket(id)
-        {           
-            confirmAction("Are you sure you want to resolve this ticket?", () => {
-                fetch(`/tickets/resolve/${id}`, {
-                    method: "PUT"
-                }).then(response => {
-                    if (response.ok) {
-                        reloadPage(); 
-                    }
-                    else {
-                        return response.json().then(err => {
-                            const errorMessage = `Error resolving ticket ${err.detail}` || "Resolving ticket failed. Please try again.";
-                            const errorElement = document.getElementById(`error-${id}`);
-                            errorElement.innerHTML = errorMessage;
-                            errorElement.style.color = "red";
-                            throw new Error(errorMessage);
-                        });
-                    }
-                });
-            });
-        }
-    </script>
     {% block javascript %}
     {% endblock %}
 </body>
