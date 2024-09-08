@@ -15,6 +15,7 @@ class CommentPublic(BaseModel):
     content: str
     ticket_id: str
     author: UserPublic
+    creation_datetime: datetime
     class Config:
         from_attributes = True
 

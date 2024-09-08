@@ -14,16 +14,16 @@
                 <td>{{ other_user.username }}<p style="display: inline; font-weight: bold;">{% if other_user.id == user.id %}&nbsp;(You){% endif %}<p></td>
                 <td>{{ other_user.is_admin }}</td>
                 <td style="padding-top: 20px;">
-                    <a 
-                        href="#" 
-                        class="btn {{ 'disabled' if other_user.is_admin else '' }}" 
-                        style="background-color: var(--btn-accept);" 
+                    <button 
+                        type="button" 
+                        class="btn btn-primary {{ 'disabled' if other_user.is_admin else '' }}" 
+                        style="background-color: var(--btn-accept); border-color: var(--btn-accept); color: black;" 
                         onclick="promoteUser('{{ other_user.id }}')"
                         data-bs-toggle="tooltip" 
                         data-bs-placement="bottom"
                         data-bs-title="Grant user admin priveliges."
-                    >Promote</a>
-                    <a href="#" class="btn {{ 'disabled' if other_user.is_admin else '' }}" style="background-color: var(--btn-decline);" onclick="deleteUser('{{ other_user.id }}')">Delete</a>
+                    >Promote</button>
+                    <button type="button" class="btn btn-primary {{ 'disabled' if other_user.is_admin else '' }}" style="background-color: var(--btn-decline); border-color: var(--btn-decline); color: black;" onclick="deleteUser('{{ other_user.id }}')">Delete</button>
                     <p id="error-{{ other_user.id }}" style="margin-top: 10px;"></p>
                 </td>
             </tr>

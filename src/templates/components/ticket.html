@@ -17,8 +17,10 @@
             </div>
         </div>
         <p class="card-text">{{ ticket.content|truncate(400, True, "...") }}</p>
-        <a class="btn {{ 'disabled' if ticket.resolved else '' }}" style="background-color: var(--btn-accept);" onclick="resolveTicket('{{ ticket.id }}')">Resolve</a>
-        <a class="btn" style="background-color: var(--btn-decline);" onclick="deleteTicket('{{ ticket.id }}')">Delete</a>
-        <p id="error-{{ ticket.id }}" style="margin-top: 10px;"></p>
+
+
+        <button type="button" class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }}" style="background-color: var(--btn-accept); border-color: var(--btn-accept); color: black;" onclick="resolveTicket('{{ ticket.id }}')">Resolve</button>
+        <button type="button" class="btn btn-primary" style="background-color: var(--btn-decline); border-color: var(--btn-decline); color: black;" onclick="deleteTicket('{{ ticket.id }}')">Delete</button>
+        <p id="error-{{ ticket.id }}" style="margin-top: 10px; color: red;"></p>
     </div>
 </div>
