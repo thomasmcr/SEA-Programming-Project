@@ -48,3 +48,7 @@ body {
 .btn:hover{
     filter: brightness(90%);
 }
+
+.btn {
+ border: none;
+}
