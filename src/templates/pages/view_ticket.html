@@ -7,7 +7,6 @@
     </a>
     <div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
         <div class="card-header" style="padding-top: 20px; padding-bottom: 20px;">
-
             <h1 id="ticket-title" class="card-title edit-disabled" style="font-size: 20px; display: inline-block;">
                 {{ticket.title}}
             </h1>
@@ -15,7 +14,7 @@
                 style="display: none; font-size: 20px; margin-bottom: 10px; font-weight: 500;" value="{{ ticket.title }}" />
 
             {% if ticket.resolved %}
-                <img src="{{ url_for('static', path='images/check.svg') }}" style="display: inline-block; margin-top: -5px;" />
+            <img src="{{ url_for('static', path='images/check.svg') }}" style="display: inline-block; margin-top: -5px;" />
             {% endif %}
 
             <h2 class="card-subtitle" style="font-size: 16px; margin-bottom: 10px;">{{ ticket.id }}</h2>
@@ -30,82 +29,52 @@
             <p id="ticket-content" style="margin-bottom: 20px; display: block;" class="edit-disabled">
                 {{ ticket.content }}
             </p>
-            <textarea 
-                id="edit-content" 
-                class="form-control edit-enabled" 
-                rows="4"
-                style="display: none; margin-bottom: 20px; field-sizing: content;"
-            >
-                {{ ticket.content }}
+            <textarea id="edit-content" class="form-control edit-enabled" rows="4" style="display: none; margin-bottom: 20px; field-sizing: content;">
+                {{- ticket.content -}}
             </textarea>
 
             <!-- Regular buttons -->
-            <button 
-                type="button" 
-                class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }} edit-disabled"
+            <button type="button" class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }} edit-disabled"
                 style="background-color: var(--btn-accept); border-color: var(--btn-accept); color: black;"
-                onclick="resolveTicket('{{ ticket.id }}')"
-            >
+                onclick="resolveTicket('{{ ticket.id }}')">
                 Resolve
             </button>
 
-            <button 
-                type="button" 
-                class="btn btn-primary edit-disabled"
-                style="background-color: var(--btn-decline); border-color: var(--btn-decline); color: black;" 
-                onclick="deleteTicket('{{ ticket.id }}')"
-            >
+            <button type="button" class="btn btn-primary edit-disabled"
+                style="background-color: var(--btn-decline); border-color: var(--btn-decline); color: black;"
+                onclick="deleteTicket('{{ ticket.id }}')">
                 Delete
             </button>
 
             <!-- Edit buttons -->
-            <button 
-                id="edit-btn" 
-                type="button" 
-                class="btn btn-primary edit-disabled"
-                style="background-color: var(--btn-neutral); color: black;" 
-                onclick="setEdit(true)"
-            >
+            <button id="edit-btn" type="button" class="btn btn-primary edit-disabled"
+                style="background-color: var(--btn-neutral); color: black;" onclick="setEdit(true)">
                 Edit
             </button>
-            <button 
-                id="save-btn" 
-                type="button" 
-                class="btn btn-primary edit-enabled"
+            <button id="save-btn" type="button" class="btn btn-primary edit-enabled"
                 onclick="confirmAction('Are you sure? changes will overwrite existing information.', () => {saveEdit()})"
-                style="display: none; background-color: var(--btn-accept); color: black;"
-            >
+                style="display: none; background-color: var(--btn-accept); color: black;">
                 Save
             </button>
-            <button 
-                id="cancel-btn" 
-                type="button" 
-                class="btn btn-primary edit-enabled"
+            <button id="cancel-btn" type="button" class="btn btn-primary edit-enabled"
                 onclick="confirmAction('Are you sure? Any unsaved changes will be lost.', () => {setEdit(false)})"
-                style="display: none; background-color: var(--btn-decline); color: black;"
-            >
+                style="display: none; background-color: var(--btn-decline); color: black;">
                 Cancel
             </button>
             <p id="formSubmitInfo" style="font-style: italic; margin-top: 20px;"></p>
 
-            <h1 style="font-size: 20px; margin-top: 20px; margin-bottom: 20px;">
+            <!-- Comments -->
+            <h1 style="font-size: 20px; margin-top: 20px; margin-bottom: 20px;" class="edit-disabled">
                 <i class="bi bi-chat" style="font-size: 20px; vertical-align: text-top;"></i>
-                    &nbsp;{{ticket.comments|length}} Comments
-                <a 
-                    data-bs-toggle="collapse" 
-                    href="#commentsCollapse"
-                    role="button" 
-                    aria-expanded="false"
-                    aria-controls="commentsCollapse" 
-                    style="text-decoration: none;" 
-                    class="collapseButton"
-                >
+                &nbsp;{{ticket.comments|length}} Comments
+                <a data-bs-toggle="collapse" href="#commentsCollapse" role="button" aria-expanded="false"
+                    aria-controls="commentsCollapse" style="text-decoration: none;" class="collapseButton">
                 </a>
             </h1>
             <section id="commentsCollapse" class="collapse show">
                 {% include "/components/create_comment_form.html" %}
                 {% for comment in ticket.comments %}
-                    {% include "/components/comment.html" %}
+                {% include "/components/comment.html" %}
                 {% endfor %}
             </section>
         </div>
@@ -190,8 +159,7 @@
         });
     </script>
     <script>
-        function deleteTicket(id)
-        {   
+        function deleteTicket(id) {
             confirmAction("Are you sure you want to delete this ticket?", () => {
                 fetch(`/tickets/${id}`, {
                     method: "DELETE"
@@ -208,18 +176,17 @@
                             throw new Error(errorMessage);
                         });
                     }
-                }) 
+                })
             });
         }
 
-        async function resolveTicket(id)
-        {           
+        async function resolveTicket(id) {
             confirmAction("Are you sure you want to resolve this ticket?", () => {
                 fetch(`/tickets/resolve/${id}`, {
                     method: "PUT"
                 }).then(response => {
                     if (response.ok) {
-                        reloadPage(); 
+                        reloadPage();
                     }
                     else {
                         return response.json().then(err => {
