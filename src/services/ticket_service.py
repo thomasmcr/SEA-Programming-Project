@@ -57,6 +57,11 @@ def update_ticket(db: Session, ticket_id: str, new_title: Optional[str], new_con
     ticket_to_update = db.query(Ticket).filter(Ticket.id == ticket_id).first()
     if(ticket_to_update):
         if(ticket_to_update.author_id == user.id or user.is_admin):
+            if(ticket_to_update.resolved == True):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=f'Cannot update ticket: {ticket_id} as it is resolved.'
+                )
             if(new_title):
                 ticket_to_update.title = new_title
             if (new_content):

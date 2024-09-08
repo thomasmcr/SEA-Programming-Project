@@ -47,7 +47,7 @@
             </button>
 
             <!-- Edit buttons -->
-            <button id="edit-btn" type="button" class="btn btn-primary edit-disabled"
+            <button id="edit-btn" type="button" class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }} edit-disabled"
                 style="background-color: var(--btn-neutral); color: black;" onclick="setEdit(true)">
                 Edit
             </button>
@@ -71,12 +71,12 @@
                     aria-controls="commentsCollapse" style="text-decoration: none;" class="collapseButton">
                 </a>
             </h1>
-            <section id="commentsCollapse" class="collapse show">
+            <div id="commentsCollapse" class="collapse show edit-disabled">
                 {% include "/components/create_comment_form.html" %}
                 {% for comment in ticket.comments %}
-                {% include "/components/comment.html" %}
+                    {% include "/components/comment.html" %}
                 {% endfor %}
-            </section>
+            </div>
         </div>
     </div>
 {% endblock %}
