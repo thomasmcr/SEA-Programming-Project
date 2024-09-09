@@ -9,21 +9,38 @@
                 <label for="contentInput" class="form-label">Content</label>
                 <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
             </div>
-            <p id="formSubmitInfo" style="color: red; font-style: italic;"></p>
-            <div style="flex-basis: 100%; margin-top: 15px;">
+            <p id="ticketFormInfo"></p>
+            <div style="flex-basis: 100%;">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
     </div>
 </div>
 <script>
-    info = document.getElementById("formSubmitInfo")
+    ticketFormInfo = document.getElementById("ticketFormInfo")
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
-        const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
+
+        const formData = new FormData(event.target);
+        const title = formData.get("title");
+        const content = formData.get("content");
+
+        if(!title || title.trim() === ""){
+            ticketFormInfo.innerHTML = "Title cannot be blank.";
+            ticketFormInfo.style.color = "red";
+            return; 
+        }
+
+        if(!content || content.trim() === ""){
+            ticketFormInfo.innerHTML = "Content cannot be blank.";
+            ticketFormInfo.style.color = "red";
+            return; 
+        }
+
+        const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/tickets", {
             method: "POST",
-            body: formData,
+            body: formDataJson,
             headers: {
                 "Content-Type": "application/json"
             },
@@ -34,8 +51,8 @@
             else {
                 return response.json().then(err => {
                     const errorMessage = err.detail || "Create ticket failed. Please try again.";
-                    info.innerHTML = errorMessage;
-                    info.style.color = "red";
+                    ticketFormInfo.innerHTML = errorMessage;
+                    ticketFormInfo.style.color = "red";
                     throw new Error(errorMessage);
                 });
             }

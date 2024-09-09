@@ -8,7 +8,7 @@ def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
     if(isBlank(title) or isBlank(content)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="title and content strings cannot be blank."
+            detail="Title and content strings cannot be blank."
         )
     new_ticket = Ticket(title=title, content=content, author_id=user_id)
     db.add(new_ticket)

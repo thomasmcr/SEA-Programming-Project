@@ -75,7 +75,7 @@ def register_user(db: Session, username: str, password: str) -> Optional[User]:
     if(existing_user):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f'Username: {username} already in use.'
+            detail=f'Username {username} already in use.'
         )
     
     salt = gensalt()

@@ -11,22 +11,40 @@
                     <input type="text" class="form-control" id="usernameInput" name="username" required>
                     <label for="passwordInput" class="form-label" style="margin-top: 15px;">Password</label>
                     <input type="password" class="form-control" id="passwordInput" name="password" required>
-                    <p id="formSubmitInfo" style="color: red; font-style: italic;"></p>
-                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Submit</button>
-                    <p style="margin-top: 30px;">Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Sign Up</a></p>
+                    <p id="loginFormInfo" style="margin-top: 20px;"></p>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <p style="margin-top: 20px;">Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Sign Up</a></p>
                 </form>
             </div>
         </div>
     </div>
 </div>
 <script>
-    info = document.getElementById("formSubmitInfo")
+    loginFormInfo = document.getElementById("loginFormInfo")
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
+        loginFormInfo.innerHTML = "";
+        
+        const formData = new FormData(event.target);
+        const username = formData.get("username");
+        const password = formData.get("password");
+
+        if(!username || username.trim() === ""){
+            loginFormInfo.innerHTML = "Username cannot be blank.";
+            loginFormInfo.style.color = "red";
+            return; 
+        }
+
+        if(!password || password.trim() === ""){
+            loginFormInfo.innerHTML = "Password cannot be blank.";
+            loginFormInfo.style.color = "red";
+            return; 
+        }
+
+        const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/auth-sessions/login", {
             method: "POST", 
-            body: formData, 
+            body: formDataJson, 
             headers: {
                 "Content-Type": "application/json"
             },
@@ -40,8 +58,8 @@
             else{
                 return response.json().then(err => {
                     const errorMessage = err.detail || "Login failed. Please try again.";
-                    info.innerHTML = errorMessage;
-                    info.style.color = "red";
+                    loginFormInfo.innerHTML = errorMessage;
+                    loginFormInfo.style.color = "red";
                     throw new Error(errorMessage);
                 });
             }

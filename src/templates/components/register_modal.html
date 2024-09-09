@@ -13,7 +13,7 @@
                     <input type="password" class="form-control" id="passwordInput" name="password" required>
                     <label for="confirmPasswordInput" class="form-label" style="margin-top: 10px;">Confirm Password</label>
                     <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPassword" required>
-                    <p id="formSubmitInfo" style="color: red; font-style: italic;"></p>
+                    <p id="registerFormInfo" style="margin-top: 20px;"></p>
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <p style="margin-top: 30px;">Don't have an account? <a href="#">Sign Up</a></p>
                 </form>
@@ -22,13 +22,41 @@
     </div>
 </div>
 <script>
-    info = document.getElementById("formSubmitInfo")
+    registerInfo = document.getElementById("registerFormInfo")
     document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
+
+        const formData = new FormData(event.target);
+        const username = formData.get("username");
+        const password = formData.get("password");
+        const confirmPassword = formData.get("confirmPassword")
+        
+        if(!username || username.trim() === ""){
+            registerInfo.innerHTML = "Username cannot be blank.";
+            registerInfo.style.color = "red";
+            return; 
+        }
+
+        if(!password || password.trim() === ""){
+            registerInfo.innerHTML = "Password cannot be blank.";
+            registerInfo.style.color = "red";
+            return; 
+        }
+
+        if(confirmPassword != password){
+            registerInfo.innerHTML = "Passwords do not match.";
+            registerInfo.style.color = "red";
+            return; 
+        }
+
+        const formDataToSend = new FormData();
+        formDataToSend.append('username', username);
+        formDataToSend.append('password', password);
+        const formDataJson = JSON.stringify(Object.fromEntries(formDataToSend.entries()));
+        
         fetch("/users/register", {
             method: "POST", 
-            body: formData, 
+            body: formDataJson, 
             headers: {
                 "Content-Type": "application/json"
             },
@@ -42,8 +70,8 @@
             else{
                 return response.json().then(err => {
                     const errorMessage = err.detail || "Registering failed. Please try again.";
-                    info.innerHTML = errorMessage;
-                    info.style.color = "red";
+                    registerInfo.innerHTML = errorMessage;
+                    registerInfo.style.color = "red";
                     throw new Error(errorMessage);
                 });
             }

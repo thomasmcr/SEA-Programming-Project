@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from src.database.core import get_db
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -6,16 +6,19 @@ from sqlalchemy.orm import Session
 from src.database.models import User
 from src.dependencies.auth_dependencies import check_auth
 from src.schemas.user_schemas import RegisterRequest
+from src.services.auth_session_service import refresh_session
 from src.services.user_service import delete_user, promote_user, register_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 @router.post("/register", tags=["User"])
-async def register(register_request: RegisterRequest, db: Session = Depends(get_db)):
+async def register(register_request: RegisterRequest, res: Response, db: Session = Depends(get_db)):
    new_user = register_user(db, register_request.username, register_request.password)
-   if new_user:
-       return {"detail": "Succesfully registered user.", "user": new_user.get_user_public()}
+   if new_user:    
+        session = refresh_session(new_user, db)
+        res.set_cookie("sessionId", session.id)
+        return {"detail": "Succesfully registered user.", "user": new_user.get_user_public()}
    else: 
         raise HTTPException(
            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
