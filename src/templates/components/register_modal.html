@@ -1,19 +1,21 @@
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="loginModalLabel">Login</h1>
+                <h1 class="modal-title fs-5" id="registerModalLabel">Register</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post" style="margin-top: 15px;" id="loginForm">
+                <form method="post" style="margin-top: 15px;" id="registerForm">
                     <label for="usernameInput" class="form-label">Username</label>
                     <input type="text" class="form-control" id="usernameInput" name="username" required>
-                    <label for="passwordInput" class="form-label" style="margin-top: 15px;">Password</label>
+                    <label for="passwordInput" class="form-label" style="margin-top: 20px;">Password</label>
                     <input type="password" class="form-control" id="passwordInput" name="password" required>
+                    <label for="confirmPasswordInput" class="form-label" style="margin-top: 10px;">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPassword" required>
                     <p id="formSubmitInfo" style="color: red; font-style: italic;"></p>
-                    <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Submit</button>
-                    <p style="margin-top: 30px;">Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Sign Up</a></p>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <p style="margin-top: 30px;">Don't have an account? <a href="#">Sign Up</a></p>
                 </form>
             </div>
         </div>
@@ -21,10 +23,10 @@
 </div>
 <script>
     info = document.getElementById("formSubmitInfo")
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
-        fetch("/auth-sessions/login", {
+        fetch("/users/register", {
             method: "POST", 
             body: formData, 
             headers: {
@@ -32,14 +34,14 @@
             },
         }).then(response => {
             if(response.ok){
-                const loginModalElement = document.getElementById("loginModal");
-                const loginModal = bootstrap.Modal.getInstance(loginModalElement) || new bootstrap.Modal(loginModalElement);
-                loginModal.hide();
+                const registerModalElement = document.getElementById("registerModal");
+                const registerModal = bootstrap.Modal.getInstance(registerModalElement) || new bootstrap.Modal(registerModalElement);
+                registerModal.hide();
                 location.replace("{{ page }}")
             }
             else{
                 return response.json().then(err => {
-                    const errorMessage = err.detail || "Login failed. Please try again.";
+                    const errorMessage = err.detail || "Registering failed. Please try again.";
                     info.innerHTML = errorMessage;
                     info.style.color = "red";
                     throw new Error(errorMessage);

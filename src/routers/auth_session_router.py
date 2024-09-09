@@ -5,13 +5,23 @@ from src.services.auth_session_service import refresh_session, delete_auth_sessi
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from src.schemas.user_schemas import LoginRequest
+from bcrypt import checkpw
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 @router.post("/login", tags=["Auth"])
 async def login(login_request: LoginRequest, req: Request, res: Response, db: Session = Depends(get_db)):
-    user = get_user(db, login_request.username, login_request.password)
+
+    user = get_user(db, login_request.username)
+    stored_password = user.password
+    provided_password = login_request.password.encode("utf-8")
+    if not checkpw(provided_password, stored_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f'Invalid Password.'
+        )
+    
     session = refresh_session(user, db)
     res.set_cookie("sessionId", session.id)
     return {"message": "login success.", "sessionId": session.id}

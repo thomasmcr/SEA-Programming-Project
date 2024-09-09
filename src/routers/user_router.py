@@ -5,14 +5,22 @@ from sqlalchemy.orm import Session
 
 from src.database.models import User
 from src.dependencies.auth_dependencies import check_auth
-from src.services.user_service import delete_user, promote_user
+from src.schemas.user_schemas import RegisterRequest
+from src.services.user_service import delete_user, promote_user, register_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 @router.post("/register", tags=["User"])
-async def register(db: Session = Depends(get_db)):
-   return {"message": "not implemented yet!"}
+async def register(register_request: RegisterRequest, db: Session = Depends(get_db)):
+   new_user = register_user(db, register_request.username, register_request.password)
+   if new_user:
+       return {"detail": "Succesfully registered user.", "user": new_user.get_user_public()}
+   else: 
+        raise HTTPException(
+           status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+           detail=f'Failed to register user.'
+        )
 
 @router.delete("/{user_id}", tags=["User"])
 async def delete(user_id: str, db: Session = Depends(get_db), user: User = Depends(check_auth)):

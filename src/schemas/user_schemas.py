@@ -4,6 +4,10 @@ class LoginRequest(BaseModel):
     username: str
     password: str 
 
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+
 class UserPublic(BaseModel):
     id: int
     username: str 

@@ -5,7 +5,7 @@ from src.database.models import Comment, Ticket
 from src.schemas.user_schemas import UserPublic
 
 def post_ticket(db: Session, title: str, content: str, user_id: str) -> Ticket:
-    if(not title or not content):
+    if(isBlank(title) or isBlank(content)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="title and content strings cannot be blank."
@@ -81,7 +81,7 @@ def update_ticket(db: Session, ticket_id: str, new_title: Optional[str], new_con
         )
     
 def add_comment(db: Session, ticket_id: str, content: str, user: UserPublic):
-    if(not content):
+    if(isBlank(content)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Content string cannot be blank."
@@ -117,3 +117,6 @@ def get_all_unresolved_tickets(db: Session, user_id: str) -> List[Ticket]:
 
 def get_ticket_by_id(db: Session, ticket_id: str, user: UserPublic) -> Ticket:
     return db.query(Ticket).filter(Ticket.id == ticket_id).first()
+
+def isBlank(string: str):
+    return not(string and string.strip())
