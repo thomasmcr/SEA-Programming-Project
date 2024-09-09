@@ -1,6 +1,6 @@
 from typing import List, Optional
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session, joinedload, with_loader_criteria
+from sqlalchemy.orm import Session
 from src.database.models import Comment, Ticket
 from src.schemas.user_schemas import UserPublic
 

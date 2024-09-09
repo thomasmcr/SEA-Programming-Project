@@ -3,7 +3,6 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from uuid import uuid4
-
 from src.schemas.ticket_schemas import CommentPublic, TicketPublic
 from src.schemas.user_schemas import UserPublic
 

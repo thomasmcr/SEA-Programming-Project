@@ -33,7 +33,6 @@
                 {{- ticket.content -}}
             </textarea>
 
-            <!-- Regular buttons -->
             <button type="button" class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }} edit-disabled"
                 style="background-color: var(--btn-accept); border-color: var(--btn-accept); color: black;"
                 onclick="resolveTicket('{{ ticket.id }}')">
@@ -46,7 +45,6 @@
                 Delete
             </button>
 
-            <!-- Edit buttons -->
             <button id="edit-btn" type="button" class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }} edit-disabled"
                 style="background-color: var(--btn-neutral); color: black;" onclick="setEdit(true)">
                 Edit
@@ -63,7 +61,6 @@
             </button>
             <p id="formSubmitInfo" style="font-style: italic; margin-top: 20px;"></p>
 
-            <!-- Comments -->
             <h1 style="font-size: 20px; margin-top: 20px; margin-bottom: 20px;" class="edit-disabled">
                 <i class="bi bi-chat" style="font-size: 20px; vertical-align: text-top;"></i>
                 &nbsp;{{ticket.comments|length}} Comments

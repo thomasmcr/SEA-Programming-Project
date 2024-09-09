@@ -8,7 +8,6 @@ from src.services.ticket_service import add_comment, get_user_tickets, post_tick
 from src.dependencies.auth_dependencies import check_auth
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 @router.get("/", tags=["Ticket"])
 async def get(user: User = Depends(check_auth), db: Session = Depends(get_db)):

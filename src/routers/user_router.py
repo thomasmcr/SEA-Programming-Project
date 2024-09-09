@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from src.database.core import get_db
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-
 from src.database.models import User
 from src.dependencies.auth_dependencies import check_auth
 from src.schemas.user_schemas import RegisterRequest
@@ -10,7 +9,6 @@ from src.services.auth_session_service import refresh_session
 from src.services.user_service import delete_user, promote_user, register_user
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 @router.post("/register", tags=["User"])
 async def register(register_request: RegisterRequest, res: Response, db: Session = Depends(get_db)):
