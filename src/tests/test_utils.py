@@ -36,6 +36,14 @@ def get_first_ticket():
     db = session()
     return db.query(Ticket).first()
 
+def get_first_user():
+    db = session()
+    return db.query(User).first()
+
+def count_users():
+    db = session()
+    return db.query(User).count()
+
 def get_first_comment():
     db = session()
     return db.query(Comment).first()

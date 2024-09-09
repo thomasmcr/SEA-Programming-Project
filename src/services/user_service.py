@@ -63,7 +63,7 @@ def register_user(db: Session, username: str, password: str) -> Optional[User]:
     if(isBlank(username) or isBlank(password)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f'Username and password cannot be blank'
+            detail=f'Username and password cannot be blank.'
         )
     elif(len(password) < 8):
         raise HTTPException(

@@ -14,8 +14,7 @@ def test_create_ticket(clear_db):
     data = response.json()
     ticket = data["ticket"]
     assert data["detail"] == "Succesfully added ticket."
-
-    assert "id" in ticket
+    assert set(ticket.keys()) == {"id", "title", "content", "resolved", "creation_datetime", "author_id"}
     assert ticket["title"] == "title"
     assert ticket["content"] == "content"
     assert ticket["resolved"] is False
@@ -29,7 +28,7 @@ def test_create_ticket_invalid(clear_db):
     )
     assert response.status_code == 400
     data = response.json()
-    assert data["detail"] == "title and content strings cannot be blank." 
+    assert data["detail"] == "Title and content strings cannot be blank." 
     assert get_first_ticket() == None
 
 def test_create_ticket_invalid_one(clear_db):

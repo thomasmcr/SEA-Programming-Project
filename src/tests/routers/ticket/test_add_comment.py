@@ -14,6 +14,7 @@ def test_add_comment(clear_db):
     assert response.status_code == 200, response.text
     data = response.json()
     comment = data["comment"]
+    assert set(comment.keys()) == {"id", "content", "author_id", "creation_datetime", "ticket_id"}
     assert data["detail"] == "Succesfully added comment."
     assert comment["ticket_id"] == added_ticket_one.id
     assert comment["content"] == "This is a test comment."
@@ -31,7 +32,7 @@ def test_add_comment_invalid(clear_db):
     assert get_comment_by_id("-1") == None 
     assert get_first_comment() == None
 
-def test_add_comment_invalid_one(clear_db):
+def test_add_comment_invalid_blank_json(clear_db):
     response = test_client.post(
         "/tickets/comment/-1",
         json={},

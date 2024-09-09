@@ -13,6 +13,7 @@ def test_delete_ticket_valid(clear_db):
     data = response.json()
     ticket = data["ticket"]
     assert data["detail"] == "Succesfully deleted ticket."
+    assert set(ticket.keys()) == {"id", "title", "content", "resolved", "creation_datetime", "author_id", "comments"}
     assert ticket["id"] == added_ticket.id
     assert get_ticket_by_id(added_ticket.id) == None
 
