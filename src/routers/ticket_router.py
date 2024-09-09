@@ -25,10 +25,9 @@ async def get_by_id(ticket_id: str, user: User = Depends(check_auth), db: Sessio
 
 @router.put("/{ticket_id}", tags=["Ticket"])
 async def update(update_ticket_request: UpdateTicketRequest, ticket_id: str, user: User = Depends(check_auth), db: Session = Depends(get_db)):
-    if((update_ticket_request.content == None or update_ticket_request.content.isspace()) and 
-       (update_ticket_request.title == None or update_ticket_request.title.isspace())
-    ):
-        raise HTTPException(
+
+    if isBlank(update_ticket_request.title) and isBlank(update_ticket_request.content):
+          raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Both the title and content cannot be blank."
         )
@@ -73,3 +72,6 @@ async def comment(post_comment_request: PostCommentRequest, ticket_id: str, user
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f'Failed to add comment to ticket with id {ticket_id}. Please try again.'
         )
+    
+def isBlank(string: str):
+    return not(string and string.strip())

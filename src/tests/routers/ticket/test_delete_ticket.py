@@ -7,7 +7,7 @@ from src.dependencies.auth_dependencies import check_auth
 def test_delete_ticket_valid(clear_db):
     added_ticket = add_test_ticket_to_db()
     response = test_client.delete(
-        f'/tickets/{added_ticket.id}'
+        f"/tickets/{added_ticket.id}"
     )
     assert response.status_code == 200, response.text
     data = response.json()
@@ -19,7 +19,7 @@ def test_delete_ticket_valid(clear_db):
 def test_delete_ticket_invalid(clear_db):
     ticket_id = -1
     response = test_client.delete(
-        f'/tickets/{ticket_id}'
+        f"/tickets/{ticket_id}"
     )
     assert response.status_code == 404
     data = response.json()
@@ -29,7 +29,7 @@ def test_delete_ticket_unauthorised(clear_db):
     app.dependency_overrides.pop(check_auth, None) #Remove auth override 
     added_ticket = add_test_ticket_to_db()
     response = test_client.delete(
-        f'/tickets/{added_ticket.id}'
+        f"/tickets/{added_ticket.id}"
     )
     app.dependency_overrides[check_auth] = override_check_auth
     assert response.status_code == 401

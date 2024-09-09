@@ -5,7 +5,7 @@ def test_get_all_user_tickets(clear_db):
     added_ticket_one = add_test_ticket_to_db(title="title-1")
     added_ticket_two = add_test_ticket_to_db(title="title-2")
     response = test_client.get(
-        f'/tickets/'
+        f"/tickets/"
     )
     assert response.status_code == 200
     data = response.json()
@@ -16,7 +16,7 @@ def test_get_all_user_tickets(clear_db):
 def test_get_ticket(clear_db):
     added_ticket = add_test_ticket_to_db()
     response = test_client.get(
-        f'/tickets/{added_ticket.id}'
+        f"/tickets/{added_ticket.id}"
     )
     assert response.status_code == 200
     data = response.json()
