@@ -15,7 +15,6 @@ def test_register_user(clear_db):
     assert user["username"] == "username"
     assert get_first_user() != None
 
-
 def test_register_user_invalid_blank_body(clear_db):
     response = test_client.post(
         "/users/register",
@@ -36,4 +35,15 @@ def test_register_user_invalid_username_in_use(clear_db):
     data = response.json()
     assert data["detail"] == f"Username {added_user.username} already in use."
     assert count_users() == 1
+
+def test_register_user_invalid_short_password(clear_db):
+    response = test_client.post(
+        "/users/register",
+        json={"username": "username", "password": "short"},
+    )
+    assert response.status_code == 400
+    data = response.json()
+    assert data["detail"] == "Password must be at least 8 characters long."
+    assert get_first_user() == None; 
+    
     
