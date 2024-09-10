@@ -2,5 +2,19 @@
 {% block title %}Home{% endblock %}
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
-<h1>This is the home page!</h1>
-{% endblock %}
+<h1 style="font-size: 20px;">Welcome to Conductor</h1>
+<div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
+    <div class="card-body">
+        <h1 style="font-size: 20px;">Getting Started</h1>
+        <p>
+            To get started, click the <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login / Register</a> button at the top of the page.
+            <ul>
+                <li>Existing user? Enter your details to log in.</li>
+                <li>New here? Click "Sign Up" and complete the form.</li>
+            </ul>
+            Once logged in, the pop-up will close, and you are all set to explore the application! Need more help? Check out the tutorials below for additional guidance.
+        </p>
+        <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_login.png')}}" alt="Card image cap">
+    </div>
+</div>
+{% endblock %}  

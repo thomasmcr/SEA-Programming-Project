@@ -11,11 +11,11 @@
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link {% if page == '/' %}active{% endif %}" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link {% if page == '/my-tickets-page' %}active{% endif %}" href="/my-tickets-page">My Tickets</a></li>
-                <li class="nav-item"><a class="nav-link {% if page == '/admin-dashboard-page' %}active{% endif %}" href="/admin-dashboard-page">Manage</a></li>
+                <li class="nav-item"><a class="nav-link {% if page == '/admin-dashboard-page' %}active{% endif %}" href="/admin-dashboard-page">Manage Users</a></li>
             </ul>
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">    
                 {% if not user %}
-                    <li class="nav-item" id="loginButton"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+                    <li class="nav-item" id="loginButton"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login / Register</a></li>
                 {% endif %}
                 {% if user %}
                     <li class="nav-item dropdown" id="profile">
