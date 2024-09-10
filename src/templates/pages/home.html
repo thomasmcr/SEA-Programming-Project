@@ -2,19 +2,56 @@
 {% block title %}Home{% endblock %}
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
-<h1 style="font-size: 20px;">Welcome to Conductor</h1>
-<div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
-    <div class="card-body">
-        <h1 style="font-size: 20px;">Getting Started</h1>
-        <p>
-            To get started, click the <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login / Register</a> button at the top of the page.
-            <ul>
-                <li>Existing user? Enter your details to log in.</li>
-                <li>New here? Click "Sign Up" and complete the form.</li>
-            </ul>
-            Once logged in, the pop-up will close, and you are all set to explore the application! Need more help? Check out the tutorials below for additional guidance.
-        </p>
-        <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_login.png')}}" alt="Card image cap">
-    </div>
-</div>
+    <h1 style="font-size: 20px;">Welcome to Conductor&nbsp;<a data-bs-toggle="collapse" href="#welcomeCollapse"
+        role="button" aria-expanded="false" aria-controls="welcomeCollapse" style="text-decoration: none;"
+        class="collapseButton"><i class="bi bi-arrow-up-circle"></i></a></h1>
+    <div class="collapse show" id="welcomeCollapse">
+        <div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
+            <div class="card-body">
+                <h1 style="font-size: 20px;">Getting Started</h1>
+                <p>
+                    To get started, click the "Login/Register" (1) button at the top of the page or use this handy <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">shortcut</a> .
+                    <ul>
+                        <li>Existing user? Enter your details to log in.</li>
+                        <li>New here? Click "Sign Up" (2) and complete the form.</li>
+                    </ul>
+                    Once logged in, the pop-up will close, and you are all set to start exploring the application!
+                </p>
+                <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_login.png')}}" alt="Card image cap" style="max-width: 900px;">
+                <p style="margin-top: 20px;">Need more help? Check out the tutorials below for additional guidance.</p>
+            </div>
+        </div>
+    </div> 
+
+    <h1 style="font-size: 20px; margin-top: 20px;">Additional Tutorials&nbsp;<a data-bs-toggle="collapse" href="#tutorialsCollapse"
+        role="button" aria-expanded="false" aria-controls="tutorialsCollapse" style="text-decoration: none;"
+        class="collapseButton"><i class="bi bi-arrow-down-circle"></i></a></h1>
+    <div class="collapse" id="tutorialsCollapse">
+        <div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
+            <div class="card-body">
+                <h1 style="font-size: 20px;">My Tickets</h1>
+                <p>
+                    The <a href="/my-tickets-page/">My Tickets</a> page offers access to most of Conductor's core features. From this page, you can:
+                </p>
+                <ul>
+                   <li>Create new tickets (1)</li>
+                   <li>View and manage existing tickets (2)</li>
+                   <li>Mark tickets as resolved (3)</li>
+                   <li>Delete tickets (4)</li>
+                   <li>Review Tickets (administrators only)</li>
+                </ul>
+                <p>
+                    Each section has a blue collapse arrow (<i class="bi bi-arrow-down-circle"></i>/<i class="bi bi-arrow-up-circle"></i>) 
+                    that allows you to hide or show the section as needed. Additionally, clicking a ticket's header opens up a detailed view, 
+                    where you can view comments and additional information. From this detailed view, you can also edit the details of a ticket.
+                </p>
+                <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutoriaL_my_tickets.png')}}" alt="My Tickets Page Tutorial" style="max-width: 900px;">
+                <p style="font-weight: 600; color: red;">
+                    Note: Certain actions, such as deleting a ticket or marking it as resolved, cannot be undone. You will be prompted with a confirmation
+                    dialog before these actions are completed. Once a ticket is resolved, it can no longer be edited
+                </p>
+                <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_confirmation.png')}}" alt="My Tickets Page Tutorial" style="max-width: 300px;">
+            </div>
+        </div>
+    </div> 
 {% endblock %}  
