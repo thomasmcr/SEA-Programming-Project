@@ -14,7 +14,20 @@
             </ul>
             Once logged in, the pop-up will close, and you are all set to explore the application! Need more help? Check out the tutorials below for additional guidance.
         </p>
-        <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_login.png')}}" alt="Card image cap">
+        <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_login.png')}}" alt="Card image cap" style="max-width: 900px;">
     </div>
 </div>
+<h1 style="font-size: 20px; margin-top: 20px;">Additional Tutorials&nbsp;<a data-bs-toggle="collapse" href="#tutorialsCollapse"
+    role="button" aria-expanded="false" aria-controls="tutorialsCollapse" style="text-decoration: none;"
+    class="collapseButton"></a></h1>
+<div class="collapse show" id="tutorialsCollapse">
+    <div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
+        <div class="card-body">
+            <h1 style="font-size: 20px;">My Tickets</h1>
+            <p>
+                The My Tickets page...
+            </p>
+        </div>
+    </div>
+</div> 
 {% endblock %}  
