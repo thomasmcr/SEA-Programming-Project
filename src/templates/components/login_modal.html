@@ -28,10 +28,10 @@
 <script>
     const loginFormInfo = document.getElementById("loginFormInfo");
     const spinner = document.getElementById("loginSpinner");
+    
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
         loginFormInfo.innerHTML = "";
-        spinner.style.display = "inline-block";
         
         const formData = new FormData(event.target);
         const username = formData.get("username");
@@ -48,6 +48,8 @@
             loginFormInfo.style.color = "red";
             return; 
         }
+
+        spinner.style.display = "inline-block";
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/auth-sessions/login", {
