@@ -10,12 +10,12 @@
             <div class="card-body">
                 <h1 style="font-size: 20px;">Getting Started</h1>
                 <p>
-                    To get started, click the <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login / Register</a> (1) button at the top of the page.
+                    To get started, click the "Login/Register" (1) button at the top of the page or use this handy <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">shortcut</a> .
                     <ul>
                         <li>Existing user? Enter your details to log in.</li>
                         <li>New here? Click "Sign Up" (2) and complete the form.</li>
                     </ul>
-                    Once logged in, the pop-up will close, and you are all set to explore the application!
+                    Once logged in, the pop-up will close, and you are all set to start exploring the application!
                 </p>
                 <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_login.png')}}" alt="Card image cap" style="max-width: 900px;">
                 <p style="margin-top: 20px;">Need more help? Check out the tutorials below for additional guidance.</p>
@@ -31,22 +31,26 @@
             <div class="card-body">
                 <h1 style="font-size: 20px;">My Tickets</h1>
                 <p>
-                    The "My Tickets" page provides access to most of Conductor's core functionality. From this page, you can:
-                    <ul>
-                       <li>Create new tickets (1)</li>
-                       <li>View and manage existing tickets (2)</li>
-                       <li>Mark tickets as resolved (3)</li>
-                       <li>Delete tickets (4)</li>
-                    </ul>
-                    Additionally, you can click on a ticket's header to view more details and comments (5). From this view, you can also edit the ticket's information.
-                    Next to each section is a blue collapse arrow that can be used to hide the section as needed. Note, certain operations such as deleting a ticket or
-                    marking a ticket as resolved cannot be reversed, as such, you will be prompted with a confirmation dialog before these actions are completed.
+                    The <a href="/my-tickets-page/">My Tickets</a> page offers access to most of Conductor's core features. From this page, you can:
                 </p>
-                <p style="margin-top: 20px;">
-                    If you are an administrator, this page will also include a "Pending Review" section that displays tickets awaiting review. Administrators have full control
-                    over all tickets, allowing them to perform CRUD (Create, Read, Update, and Delete) operations on any ticket, regardless of the author.
+                <ul>
+                   <li>Create new tickets (1)</li>
+                   <li>View and manage existing tickets (2)</li>
+                   <li>Mark tickets as resolved (3)</li>
+                   <li>Delete tickets (4)</li>
+                   <li>Review Tickets (administrators only)</li>
+                </ul>
+                <p>
+                    Each section has a blue collapse arrow (<i class="bi bi-arrow-down-circle"></i>/<i class="bi bi-arrow-up-circle"></i>) 
+                    that allows you to hide or show the section as needed. Additionally, clicking a ticket's header opens up a detailed view, 
+                    where you can view comments and additional information. From this detailed view, you can also edit the details of a ticket.
                 </p>
                 <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutoriaL_my_tickets.png')}}" alt="My Tickets Page Tutorial" style="max-width: 900px;">
+                <p style="font-weight: 600; color: red;">
+                    Note: Certain actions, such as deleting a ticket or marking it as resolved, cannot be undone. You will be prompted with a confirmation
+                    dialog before these actions are completed. Once a ticket is resolved, it can no longer be edited
+                </p>
+                <img class="card-img" src="{{ url_for('static', path='images/tutorial/tutorial_confirmation.png')}}" alt="My Tickets Page Tutorial" style="max-width: 300px;">
             </div>
         </div>
     </div> 
