@@ -12,7 +12,7 @@
 </form>
 <script>
     const commentFormInfo = document.getElementById("commentFormInfo");
-    const spinner = document.getElementById("commentSpinner");
+    const commentSpinner = document.getElementById("commentSpinner");
 
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -27,7 +27,7 @@
             return; 
         }
 
-        spinner.style.display = "inline-block"; 
+        commentSpinner.style.display = "inline-block"; 
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         const ticketId = "{{ticket.id}}";
@@ -38,7 +38,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            spinner.style.display = "none"; 
+            commentSpinner.style.display = "none"; 
             if (response.ok) {
                 location.replace("{{ page }}")
             }
@@ -51,7 +51,7 @@
                 });
             }
         }).catch(error => {
-            spinner.style.display = "none"; 
+            commentSpinner.style.display = "none"; 
             console.log(error)
         })
     });

@@ -27,8 +27,8 @@
 </div>
 <script>
     const loginFormInfo = document.getElementById("loginFormInfo");
-    const spinner = document.getElementById("loginSpinner");
-    
+    const loginSpinner = document.getElementById("loginSpinner");
+
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
         loginFormInfo.innerHTML = "";
@@ -49,7 +49,7 @@
             return; 
         }
 
-        spinner.style.display = "inline-block";
+        loginSpinner.style.display = "inline-block";
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/auth-sessions/login", {
@@ -59,7 +59,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            spinner.style.display = "none";
+            loginSpinner.style.display = "none";
             if(response.ok){
                 const loginModalElement = document.getElementById("loginModal");
                 const loginModal = bootstrap.Modal.getInstance(loginModalElement) || new bootstrap.Modal(loginModalElement);
@@ -75,7 +75,7 @@
                 });
             }
         }).catch(error => {
-            spinner.style.display = "none";
+            loginSpinner.style.display = "none";
             console.log(error)
         })
     });

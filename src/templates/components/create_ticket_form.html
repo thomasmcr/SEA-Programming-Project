@@ -24,7 +24,7 @@
 </div>
 <script>
     const ticketFormInfo = document.getElementById("ticketFormInfo");
-    const spinner = document.getElementById("createTicketSpinner");
+    const createTicketSpinner = document.getElementById("createTicketSpinner");
 
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -45,7 +45,7 @@
             return; 
         }
 
-        spinner.style.display = "inline-block";
+        createTicketSpinner.style.display = "inline-block";
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/tickets", {
@@ -55,7 +55,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            spinner.style.display = "none";
+            createTicketSpinner.style.display = "none";
             if (response.ok) {
                 location.replace("{{ page }}")
             }
@@ -68,7 +68,7 @@
                 });
             }
         }).catch(error => {
-            spinner.style.display = "none";
+            createTicketSpinner.style.display = "none";
             console.log(error)
         })
     });

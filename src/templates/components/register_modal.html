@@ -29,7 +29,7 @@
 </div>
 <script>
     const registerInfo = document.getElementById("registerFormInfo")
-    const spinner = document.getElementById("registerSpinner");
+    const registerSpinner = document.getElementById("registerSpinner");
     
     document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -57,7 +57,7 @@
             return; 
         }
 
-        spinner.style.display = "inline-block";
+        registerSpinner.style.display = "inline-block";
 
         const formDataToSend = new FormData();
         formDataToSend.append('username', username);
@@ -71,7 +71,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            spinner.style.display = "none";
+            registerSpinner.style.display = "none";
             if(response.ok){
                 const registerModalElement = document.getElementById("registerModal");
                 const registerModal = bootstrap.Modal.getInstance(registerModalElement) || new bootstrap.Modal(registerModalElement);
@@ -87,7 +87,7 @@
                 });
             }
         }).catch(error => {
-            spinner.style.display = "none";
+            registerSpinner.style.display = "none";
             console.log(error)
         })
     });
