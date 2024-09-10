@@ -11,13 +11,21 @@
             </div>
             <p id="ticketFormInfo"></p>
             <div style="flex-basis: 100%;">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                    <span id="createTicketSpinner" style="display: none;">
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        <span class="visually-hidden" role="status">Loading...</span>
+                    </span>
+                </button>
             </div>
         </form>
     </div>
 </div>
 <script>
-    ticketFormInfo = document.getElementById("ticketFormInfo")
+    const ticketFormInfo = document.getElementById("ticketFormInfo");
+    const createTicketSpinner = document.getElementById("createTicketSpinner");
+
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -37,6 +45,8 @@
             return; 
         }
 
+        createTicketSpinner.style.display = "inline-block";
+
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/tickets", {
             method: "POST",
@@ -45,6 +55,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
+            createTicketSpinner.style.display = "none";
             if (response.ok) {
                 location.replace("{{ page }}")
             }
@@ -57,6 +68,7 @@
                 });
             }
         }).catch(error => {
+            createTicketSpinner.style.display = "none";
             console.log(error)
         })
     });

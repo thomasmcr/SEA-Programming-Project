@@ -7,14 +7,20 @@
             </div>
             <div class="modal-body">
                 <form method="post" style="margin-top: 15px;" id="registerForm">
-                    <label for="usernameInput" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="usernameInput" name="username" required>
-                    <label for="passwordInput" class="form-label" style="margin-top: 20px;">Password</label>
-                    <input type="password" class="form-control" id="passwordInput" name="password" required>
+                    <label for="registerUsernameInput" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="registerUsernameInput" name="username" required>
+                    <label for="registerPasswordInput" class="form-label" style="margin-top: 20px;">Password</label>
+                    <input type="password" class="form-control" id="registerPasswordInput" name="password" required>
                     <label for="confirmPasswordInput" class="form-label" style="margin-top: 10px;">Confirm Password</label>
                     <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPassword" required>
                     <p id="registerFormInfo" style="margin-top: 20px;"></p>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                        <span id="registerSpinner" style="display: none;">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span class="visually-hidden" role="status">Loading...</span>
+                        </span>
+                    </button>
                     <p style="margin-top: 30px;">Don't have an account? <a href="#">Sign Up</a></p>
                 </form>
             </div>
@@ -22,7 +28,9 @@
     </div>
 </div>
 <script>
-    registerInfo = document.getElementById("registerFormInfo")
+    const registerInfo = document.getElementById("registerFormInfo")
+    const registerSpinner = document.getElementById("registerSpinner");
+    
     document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -49,6 +57,8 @@
             return; 
         }
 
+        registerSpinner.style.display = "inline-block";
+
         const formDataToSend = new FormData();
         formDataToSend.append('username', username);
         formDataToSend.append('password', password);
@@ -61,6 +71,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
+            registerSpinner.style.display = "none";
             if(response.ok){
                 const registerModalElement = document.getElementById("registerModal");
                 const registerModal = bootstrap.Modal.getInstance(registerModalElement) || new bootstrap.Modal(registerModalElement);
@@ -76,6 +87,7 @@
                 });
             }
         }).catch(error => {
+            registerSpinner.style.display = "none";
             console.log(error)
         })
     });
