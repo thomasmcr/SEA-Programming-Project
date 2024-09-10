@@ -30,6 +30,8 @@
 <script>
     const registerInfo = document.getElementById("registerFormInfo")
     const registerSpinner = document.getElementById("registerSpinner");
+    const registerButton = document.querySelector("#registerForm button[type='submit']");
+
     
     document.getElementById('registerForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -58,6 +60,7 @@
         }
 
         registerSpinner.style.display = "inline-block";
+        registerButton.disabled = true; 
 
         const formDataToSend = new FormData();
         formDataToSend.append('username', username);
@@ -71,7 +74,6 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            registerSpinner.style.display = "none";
             if(response.ok){
                 const registerModalElement = document.getElementById("registerModal");
                 const registerModal = bootstrap.Modal.getInstance(registerModalElement) || new bootstrap.Modal(registerModalElement);
@@ -87,8 +89,10 @@
                 });
             }
         }).catch(error => {
-            registerSpinner.style.display = "none";
             console.log(error)
-        })
+        }).finally(() => {
+            registerSpinner.style.display = "none";
+            registerButton.disabled = false; 
+        });
     });
 </script>

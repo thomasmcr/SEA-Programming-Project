@@ -28,6 +28,7 @@
 <script>
     const loginFormInfo = document.getElementById("loginFormInfo");
     const loginSpinner = document.getElementById("loginSpinner");
+    const loginButton = document.querySelector("#loginForm button[type='submit']");
 
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -49,6 +50,7 @@
             return; 
         }
 
+        loginButton.disabled = true; 
         loginSpinner.style.display = "inline-block";
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
@@ -59,7 +61,6 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            loginSpinner.style.display = "none";
             if(response.ok){
                 const loginModalElement = document.getElementById("loginModal");
                 const loginModal = bootstrap.Modal.getInstance(loginModalElement) || new bootstrap.Modal(loginModalElement);
@@ -75,8 +76,10 @@
                 });
             }
         }).catch(error => {
-            loginSpinner.style.display = "none";
             console.log(error)
-        })
+        }).finally(() => {
+            loginSpinner.style.display = "none";
+            loginButton.disabled = false; 
+        });
     });
 </script>

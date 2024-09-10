@@ -25,6 +25,7 @@
 <script>
     const ticketFormInfo = document.getElementById("ticketFormInfo");
     const createTicketSpinner = document.getElementById("createTicketSpinner");
+    const createTicketButton = document.querySelector("#createTicketForm button[type='submit']");
 
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -46,6 +47,7 @@
         }
 
         createTicketSpinner.style.display = "inline-block";
+        createTicketButton.disabled = true; 
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/tickets", {
@@ -55,7 +57,6 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            createTicketSpinner.style.display = "none";
             if (response.ok) {
                 location.replace("{{ page }}")
             }
@@ -68,8 +69,10 @@
                 });
             }
         }).catch(error => {
-            createTicketSpinner.style.display = "none";
             console.log(error)
-        })
+        }).finally(() => {
+            createTicketSpinner.style.display = "none";
+            createTicketButton.disabled = false; 
+        });
     });
 </script>

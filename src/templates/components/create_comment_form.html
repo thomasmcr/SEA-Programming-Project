@@ -1,4 +1,4 @@
-<form method="post" action="/" id="createTicketForm" style="margin-top: 20px; margin-bottom: 20px;">
+<form method="post" action="/" id="createCommentForm" style="margin-top: 20px; margin-bottom: 20px;">
     <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
     <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
     <p id="commentFormInfo" style="margin-top: 20px;"></p>
@@ -13,8 +13,9 @@
 <script>
     const commentFormInfo = document.getElementById("commentFormInfo");
     const commentSpinner = document.getElementById("commentSpinner");
+    const commentButton = document.querySelector("#createCommentForm button[type='submit']");
 
-    document.getElementById('createTicketForm').addEventListener('submit', function (event) {
+    document.getElementById('createCommentForm').addEventListener('submit', function (event) {
         event.preventDefault();
         commentFormInfo.innerHTML = "";
 
@@ -28,6 +29,7 @@
         }
 
         commentSpinner.style.display = "inline-block"; 
+        commentButton.disabled = true; 
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         const ticketId = "{{ticket.id}}";
@@ -38,7 +40,6 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            commentSpinner.style.display = "none"; 
             if (response.ok) {
                 location.replace("{{ page }}")
             }
@@ -51,8 +52,10 @@
                 });
             }
         }).catch(error => {
-            commentSpinner.style.display = "none"; 
             console.log(error)
-        })
+        }).finally(() => {
+            commentSpinner.style.display = "none"; 
+            commentButton.disabled = false; 
+        });
     });
 </script>
