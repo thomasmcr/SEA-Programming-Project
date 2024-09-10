@@ -1,35 +1,46 @@
-<h1 style="font-size: 20px;">Create Ticket <a data-bs-toggle="collapse" href="#createTicketCollapse"
-        role="button" aria-expanded="false" aria-controls="createTicketCollapse" style="text-decoration: none;"
-        class="collapseButton">(Hide)</a>:</h1>
-<div class="collapse show" id="createTicketCollapse">
-    <div class="card w-75" style="margin: 20px">
-        <div class="card-body">
-            <form method="post" action="/" style="display: flex; flex-wrap: wrap;" id="createTicketForm">
-                <div class="mb-3" style="flex-basis: 100%;">
-                    <label for="titleInput" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="titleInput" name="title" required />
-                </div>
-                <div class="mb-3" style="flex-basis: 100%;">
-                    <label for="contentInput" class="form-label">Content</label>
-                    <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
-                </div>
-                <p id="formSubmitInfo" style="color: red; font-style: italic;"></p>
-                <div style="flex-basis: 100%; margin-top: 15px;">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
+<div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
+    <div class="card-body">
+        <form method="post" action="/" style="display: flex; flex-wrap: wrap;" id="createTicketForm">
+            <div class="mb-3" style="flex-basis: 100%;">
+                <label for="titleInput" class="form-label">Title</label>
+                <input type="text" class="form-control" id="titleInput" name="title" required />
+            </div>
+            <div class="mb-3" style="flex-basis: 100%;">
+                <label for="contentInput" class="form-label">Content</label>
+                <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
+            </div>
+            <p id="ticketFormInfo"></p>
+            <div style="flex-basis: 100%;">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
     </div>
 </div>
-
 <script>
-    info = document.getElementById("formSubmitInfo")
+    ticketFormInfo = document.getElementById("ticketFormInfo")
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
-        const formData = JSON.stringify(Object.fromEntries(new FormData(event.target).entries()));
+
+        const formData = new FormData(event.target);
+        const title = formData.get("title");
+        const content = formData.get("content");
+
+        if(!title || title.trim() === ""){
+            ticketFormInfo.innerHTML = "Title cannot be blank.";
+            ticketFormInfo.style.color = "red";
+            return; 
+        }
+
+        if(!content || content.trim() === ""){
+            ticketFormInfo.innerHTML = "Content cannot be blank.";
+            ticketFormInfo.style.color = "red";
+            return; 
+        }
+
+        const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/tickets", {
             method: "POST",
-            body: formData,
+            body: formDataJson,
             headers: {
                 "Content-Type": "application/json"
             },
@@ -40,8 +51,8 @@
             else {
                 return response.json().then(err => {
                     const errorMessage = err.detail || "Create ticket failed. Please try again.";
-                    info.innerHTML = errorMessage;
-                    info.style.color = "red";
+                    ticketFormInfo.innerHTML = errorMessage;
+                    ticketFormInfo.style.color = "red";
                     throw new Error(errorMessage);
                 });
             }

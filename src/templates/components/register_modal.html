@@ -1,0 +1,82 @@
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="registerModalLabel">Register</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" style="margin-top: 15px;" id="registerForm">
+                    <label for="usernameInput" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="usernameInput" name="username" required>
+                    <label for="passwordInput" class="form-label" style="margin-top: 20px;">Password</label>
+                    <input type="password" class="form-control" id="passwordInput" name="password" required>
+                    <label for="confirmPasswordInput" class="form-label" style="margin-top: 10px;">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPassword" required>
+                    <p id="registerFormInfo" style="margin-top: 20px;"></p>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <p style="margin-top: 30px;">Don't have an account? <a href="#">Sign Up</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    registerInfo = document.getElementById("registerFormInfo")
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const username = formData.get("username");
+        const password = formData.get("password");
+        const confirmPassword = formData.get("confirmPassword")
+        
+        if(!username || username.trim() === ""){
+            registerInfo.innerHTML = "Username cannot be blank.";
+            registerInfo.style.color = "red";
+            return; 
+        }
+
+        if(!password || password.trim() === ""){
+            registerInfo.innerHTML = "Password cannot be blank.";
+            registerInfo.style.color = "red";
+            return; 
+        }
+
+        if(confirmPassword != password){
+            registerInfo.innerHTML = "Passwords do not match.";
+            registerInfo.style.color = "red";
+            return; 
+        }
+
+        const formDataToSend = new FormData();
+        formDataToSend.append('username', username);
+        formDataToSend.append('password', password);
+        const formDataJson = JSON.stringify(Object.fromEntries(formDataToSend.entries()));
+        
+        fetch("/users/register", {
+            method: "POST", 
+            body: formDataJson, 
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then(response => {
+            if(response.ok){
+                const registerModalElement = document.getElementById("registerModal");
+                const registerModal = bootstrap.Modal.getInstance(registerModalElement) || new bootstrap.Modal(registerModalElement);
+                registerModal.hide();
+                location.replace("{{ page }}")
+            }
+            else{
+                return response.json().then(err => {
+                    const errorMessage = err.detail || "Registering failed. Please try again.";
+                    registerInfo.innerHTML = errorMessage;
+                    registerInfo.style.color = "red";
+                    throw new Error(errorMessage);
+                });
+            }
+        }).catch(error => {
+            console.log(error)
+        })
+    });
+</script>

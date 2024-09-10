@@ -1,0 +1,201 @@
+{% extends "layout.html" %}
+{% block title %}View Ticket{% endblock %}
+{% block head %}{{ super() }}{% endblock %}
+{% block content %}
+    <a href="/my-tickets-page" style="text-decoration: none;">
+        <i class="bi bi-arrow-return-left" style="font-style: normal;"> Exit detailed view</i>
+    </a>
+    <div class="card w-75" style="margin: 20px; box-shadow: 2px 2px 5px lightgray;">
+        <div class="card-header" style="padding-top: 20px; padding-bottom: 20px;">
+            <h1 id="ticket-title" class="card-title edit-disabled" style="font-size: 20px; display: inline-block;">
+                {{ticket.title}}
+            </h1>
+            <input type="text" id="edit-title" class="form-control edit-enabled"
+                style="display: none; font-size: 20px; margin-bottom: 10px; font-weight: 500;" value="{{ ticket.title }}" />
+
+            {% if ticket.resolved %}
+            <img src="{{ url_for('static', path='images/check.svg') }}" style="display: inline-block; margin-top: -5px;" />
+            {% endif %}
+
+            <h2 class="card-subtitle" style="font-size: 16px; margin-bottom: 10px;">{{ ticket.id }}</h2>
+            <h3 class="card-subtitle" style="font-size: 16px; font-weight: lighter;">
+                By {{ ticket.author.username }}
+                on <span class="utc-date" data-datetime="{{ ticket.creation_datetime }}"></span>
+                at <span class="utc-time" data-datetime="{{ ticket.creation_datetime }}"></span>
+            </h3>
+        </div>
+        <div class="card-body">
+
+            <p id="ticket-content" style="margin-bottom: 20px; display: block;" class="edit-disabled">
+                {{ ticket.content }}
+            </p>
+            <textarea id="edit-content" class="form-control edit-enabled" rows="4" style="display: none; margin-bottom: 20px; field-sizing: content;">
+                {{- ticket.content -}}
+            </textarea>
+
+            <button type="button" class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }} edit-disabled"
+                style="background-color: var(--btn-accept); border-color: var(--btn-accept); color: black;"
+                onclick="resolveTicket('{{ ticket.id }}')">
+                Resolve
+            </button>
+
+            <button type="button" class="btn btn-primary edit-disabled"
+                style="background-color: var(--btn-decline); border-color: var(--btn-decline); color: black;"
+                onclick="deleteTicket('{{ ticket.id }}')">
+                Delete
+            </button>
+
+            <button id="edit-btn" type="button" class="btn btn-primary {{ 'disabled' if ticket.resolved else '' }} edit-disabled"
+                style="background-color: var(--btn-neutral); color: black;" onclick="setEdit(true)">
+                Edit
+            </button>
+            <button id="save-btn" type="button" class="btn btn-primary edit-enabled"
+                onclick="confirmAction('Are you sure? changes will overwrite existing information.', () => {saveEdit()})"
+                style="display: none; background-color: var(--btn-accept); color: black;">
+                Save
+            </button>
+            <button id="cancel-btn" type="button" class="btn btn-primary edit-enabled"
+                onclick="confirmAction('Are you sure? Any unsaved changes will be lost.', () => {setEdit(false)})"
+                style="display: none; background-color: var(--btn-decline); color: black;">
+                Cancel
+            </button>
+            <p id="formSubmitInfo" style="font-style: italic; margin-top: 20px;"></p>
+
+            <h1 style="font-size: 20px; margin-top: 20px; margin-bottom: 20px;" class="edit-disabled">
+                <i class="bi bi-chat" style="font-size: 20px; vertical-align: text-top;"></i>
+                &nbsp;{{ticket.comments|length}} Comments
+                <a data-bs-toggle="collapse" href="#commentsCollapse" role="button" aria-expanded="false"
+                    aria-controls="commentsCollapse" style="text-decoration: none;" class="collapseButton">
+                </a>
+            </h1>
+            <div id="commentsCollapse" class="collapse show edit-disabled">
+                {% include "/components/create_comment_form.html" %}
+                {% for comment in ticket.comments %}
+                    {% include "/components/comment.html" %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+        const originalTitle = {{ ticket.title | tojson }};
+        const originalContent = {{ ticket.content | tojson }};
+        const ticketId = {{ ticket.id | tojson }};
+        const info = document.getElementById("formSubmitInfo")
+
+        function setEdit(state) {
+            isEditing = state;
+            const editDisabledElements = document.querySelectorAll('.edit-disabled');
+            const editEnabledElements = document.querySelectorAll('.edit-enabled');
+
+            if (state) {
+                editDisabledElements.forEach(el => {
+                    el.dataset.originalDisplay = el.style.display;
+                    el.style.display = "none";
+                });
+                editEnabledElements.forEach(el => {
+                    el.dataset.originalDisplay = el.style.display;
+                    el.style.display = "inline-block";
+                });
+            } else {
+                editDisabledElements.forEach(el => {
+                    el.style.display = el.dataset.originalDisplay;
+                });
+                editEnabledElements.forEach(el => {
+                    el.style.display = el.dataset.originalDisplay;
+                });
+            }
+
+            if (state == false) {
+                document.getElementById('edit-title').value = originalTitle;
+                document.getElementById('edit-content').value = originalContent;
+            }
+        }
+
+        function saveEdit() {
+            const title = document.getElementById('edit-title').value.trim();
+            const content = document.getElementById('edit-content').value.trim();
+
+            if (!title || !content) {
+                info.innerHTML = "Error: Both title and content cannot be blank.";
+                info.style.color = "red";
+                return;
+            }
+
+            fetch(`/tickets/${ticketId}`, {
+                method: "PUT",
+                body: JSON.stringify({ title: title, content: content }),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            }).then(response => {
+                if (response.ok) {
+                    setEdit(false);
+                    location.replace("{{ page }}");
+                }
+                else {
+                    return response.json().then(err => {
+                        const errorMessage = "Error: " + err.detail || "Editing ticket failed. Please try again.";
+                        info.innerHTML = errorMessage;
+                        info.style.color = "red";
+                        throw new Error(errorMessage);
+                    });
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+
+        //If the user is in edit mode, get confirmation before reloading the page as their changes will be lost
+        window.addEventListener('beforeunload', function (event) {
+            if (!isEditing) { return event; }
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            event.preventDefault();
+            event.returnValue = confirmationMessage;
+        });
+    </script>
+    <script>
+        function deleteTicket(id) {
+            confirmAction("Are you sure you want to delete this ticket?", () => {
+                fetch(`/tickets/${id}`, {
+                    method: "DELETE"
+                }).then(response => {
+                    if (response.ok) {
+                        location.replace("/my-tickets-page")
+                    }
+                    else {
+                        return response.json().then(err => {
+                            const errorMessage = `Error deleting ticket ${err.detail}` || "Create ticket failed. Please try again.";
+                            const errorElement = document.getElementById(`error-${id}`);
+                            errorElement.innerHTML = errorMessage;
+                            errorElement.style.color = "red";
+                            throw new Error(errorMessage);
+                        });
+                    }
+                })
+            });
+        }
+
+        async function resolveTicket(id) {
+            confirmAction("Are you sure you want to resolve this ticket?", () => {
+                fetch(`/tickets/resolve/${id}`, {
+                    method: "PUT"
+                }).then(response => {
+                    if (response.ok) {
+                        reloadPage();
+                    }
+                    else {
+                        return response.json().then(err => {
+                            const errorMessage = `Error resolving ticket ${err.detail}` || "Resolving ticket failed. Please try again.";
+                            const errorElement = document.getElementById(`error-${id}`);
+                            errorElement.innerHTML = errorMessage;
+                            errorElement.style.color = "red";
+                            throw new Error(errorMessage);
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+{% endblock %}

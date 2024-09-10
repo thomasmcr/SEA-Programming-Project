@@ -1,0 +1,46 @@
+<form method="post" action="/" id="createTicketForm" style="margin-top: 20px; margin-bottom: 20px;">
+    <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
+    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+    <p id="commentFormInfo" style="margin-top: 20px;"></p>
+    <button type="submit" class="btn btn-primary">Comment</button>
+</form>
+<script>
+    commentFormInfo = document.getElementById("commentFormInfo")
+    document.getElementById('createTicketForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        commentFormInfo.innerHTML = "";
+
+        const formData = new FormData(event.target);
+        const content = formData.get("content");
+
+        if(!content || content.trim() === ""){
+            commentFormInfo.innerHTML = "Comment cannot be blank.";
+            commentFormInfo.style.color = "red";
+            return; 
+        }
+
+        const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
+        const ticketId = "{{ticket.id}}";
+        fetch(`/tickets/comment/${ticketId}`, {
+            method: "POST",
+            body: formDataJson,
+            headers: {
+                "Content-Type": "application/json"
+            },
+        }).then(response => {
+            if (response.ok) {
+                location.replace("{{ page }}")
+            }
+            else {
+                return response.json().then(err => {
+                    const errorMessage = err.detail || "Adding comment failed. Please try again.";
+                    commentFormInfo.innerHTML = errorMessage;
+                    commentFormInfo.style.color = "red";
+                    throw new Error(errorMessage);
+                });
+            }
+        }).catch(error => {
+            console.log(error)
+        })
+    });
+</script>

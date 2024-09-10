@@ -5,8 +5,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='images/logo-duotone.png') }}">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link 
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+        >
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <link href="{{ url_for('static', path='css/global.css') }}" rel="stylesheet">
         <title>{% block title %}{% endblock %}</title>
     {% endblock %}
@@ -20,26 +25,27 @@
     <div id="modals">
         {% block modals %}
             {% include "components/login_modal.html" %}
-            {% include "components/alerts/test_alert.html" %}
+            {% include "components/register_modal.html" %}
         {% endblock %}
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous">
-    </script>
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+        crossorigin="anonymous"
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-       function confirmAction(title, callback) {
-            Swal.fire({
-                title: title,
-                showDenyButton: true,
-                confirmButtonText: "Yes I'm sure",
-                denyButtonText: "No I changed my mind",
-                icon: "question"
-            }).then(result => {
-                if(result.isConfirmed){ callback(); }
-            });
-        }
+        function confirmAction(title, callback) {
+                Swal.fire({
+                    title: title,
+                    showDenyButton: true,
+                    confirmButtonText: "Confirm",
+                    denyButtonText: "Cancel",
+                    icon: "question"
+                }).then(result => {
+                    if(result.isConfirmed){ callback(); }
+                });
+            }
     </script>
     <script>
         function reloadPage(preserveScroll = true){
@@ -48,7 +54,6 @@
             }
             location.replace("{{ page }}")
         }
-
         const scrollY = parseInt(localStorage.getItem("scrollY") ?? 0);
         window.scrollTo({top: scrollY, left: 0, behavior: 'instant'});
         localStorage.removeItem("scrollY");
@@ -61,25 +66,53 @@
 
             const storedState = localStorage.getItem(controlledElementId);
             if(storedState !== null){
-                if (storedState === 'true') {
-                    controlledElement.classList.add('show');
-                    button.textContent = '(Hide)';
+                if (storedState === "true") {
+                    controlledElement.classList.add("show");
+                    button.innerHTML = '<i class="bi bi-arrow-up-circle"></i>';
                 } else {
                     controlledElement.classList.remove('show');
-                    button.textContent = '(Show)';
+                    button.innerHTML = '<i class="bi bi-arrow-down-circle"></i>';
                 }
             }
+            else
+            {
+                controlledElement.classList.add("show");
+                button.innerHTML = '<i class="bi bi-arrow-up-circle"></i>';
+            }
     
-            controlledElement.addEventListener('show.bs.collapse', function () {
-                button.textContent = '(Hide)';
-                localStorage.setItem(controlledElementId, 'true');
+            controlledElement.addEventListener("show.bs.collapse", function () {
+                button.innerHTML = '<i class="bi bi-arrow-up-circle"></i>';
+                localStorage.setItem(controlledElementId, "true");
             });
     
-            controlledElement.addEventListener('hide.bs.collapse', function () {
-                button.textContent = '(Show)';
-                localStorage.setItem(controlledElementId, 'false');
+            controlledElement.addEventListener("hide.bs.collapse", function () {
+                button.innerHTML = '<i class="bi bi-arrow-down-circle"></i>';
+                localStorage.setItem(controlledElementId, "false");
             });
         });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateElements = document.querySelectorAll('.utc-date');
+            const timeElements = document.querySelectorAll('.utc-time');
+            dateElements.forEach(function(dateElement) {
+                const datetimeStr = dateElement.getAttribute('data-datetime');
+                const datetime = new Date(datetimeStr);
+                const localDate = datetime.toLocaleDateString();
+                dateElement.textContent = localDate;
+            });
+    
+            timeElements.forEach(function(timeElement) {
+                const datetimeStr = timeElement.getAttribute('data-datetime');
+                const datetime = new Date(datetimeStr + " UTC");
+                const localTime = datetime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+                timeElement.textContent = localTime;
+            });
+    });
+    </script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
     {% block javascript %}
     {% endblock %}
