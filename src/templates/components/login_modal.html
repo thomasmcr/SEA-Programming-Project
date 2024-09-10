@@ -7,12 +7,18 @@
             </div>
             <div class="modal-body">
                 <form method="post" style="margin-top: 15px;" id="loginForm">
-                    <label for="usernameInput" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="usernameInput" name="username" required>
-                    <label for="passwordInput" class="form-label" style="margin-top: 15px;">Password</label>
-                    <input type="password" class="form-control" id="passwordInput" name="password" required>
+                    <label for="loginUsernameInput" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="loginUsernameInput" name="username" required>
+                    <label for="loginPasswordInput" class="form-label" style="margin-top: 15px;">Password</label>
+                    <input type="password" class="form-control" id="loginPasswordInput" name="password" required>
                     <p id="loginFormInfo" style="margin-top: 20px;"></p>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                        <span id="loginSpinner" style="display: none;">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span class="visually-hidden" role="status">Loading...</span>
+                        </span>
+                    </button>
                     <p style="margin-top: 20px;">Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Sign Up</a></p>
                 </form>
             </div>
@@ -20,10 +26,12 @@
     </div>
 </div>
 <script>
-    loginFormInfo = document.getElementById("loginFormInfo")
+    const loginFormInfo = document.getElementById("loginFormInfo");
+    const spinner = document.getElementById("loginSpinner");
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
         loginFormInfo.innerHTML = "";
+        spinner.style.display = "inline-block";
         
         const formData = new FormData(event.target);
         const username = formData.get("username");
@@ -49,6 +57,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
+            spinner.style.display = "none";
             if(response.ok){
                 const loginModalElement = document.getElementById("loginModal");
                 const loginModal = bootstrap.Modal.getInstance(loginModalElement) || new bootstrap.Modal(loginModalElement);
@@ -64,6 +73,7 @@
                 });
             }
         }).catch(error => {
+            spinner.style.display = "none";
             console.log(error)
         })
     });

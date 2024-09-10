@@ -2,10 +2,18 @@
     <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
     <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
     <p id="commentFormInfo" style="margin-top: 20px;"></p>
-    <button type="submit" class="btn btn-primary">Comment</button>
+    <button type="submit" class="btn btn-primary">
+        Comment
+        <span id="commentSpinner" style="display: none;">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+            <span class="visually-hidden" role="status">Loading...</span>
+        </span>
+    </button>
 </form>
 <script>
-    commentFormInfo = document.getElementById("commentFormInfo")
+    const commentFormInfo = document.getElementById("commentFormInfo");
+    const spinner = document.getElementById("createTicketSpinner");
+
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
         commentFormInfo.innerHTML = "";
@@ -19,6 +27,8 @@
             return; 
         }
 
+        spinner.style.display = "inline-block"; 
+
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         const ticketId = "{{ticket.id}}";
         fetch(`/tickets/comment/${ticketId}`, {
@@ -28,6 +38,7 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
+            spinner.style.display = "none"; 
             if (response.ok) {
                 location.replace("{{ page }}")
             }
@@ -40,6 +51,7 @@
                 });
             }
         }).catch(error => {
+            spinner.style.display = "none"; 
             console.log(error)
         })
     });
