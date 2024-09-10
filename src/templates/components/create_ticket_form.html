@@ -3,11 +3,11 @@
         <form method="post" action="/" style="display: flex; flex-wrap: wrap;" id="createTicketForm">
             <div class="mb-3" style="flex-basis: 100%;">
                 <label for="titleInput" class="form-label">Title</label>
-                <input type="text" class="form-control" id="titleInput" name="title" required />
+                <input type="text" class="form-control" id="titleInput" name="title" required placeholder="Title"/>
             </div>
             <div class="mb-3" style="flex-basis: 100%;">
                 <label for="contentInput" class="form-label">Content</label>
-                <textarea type="text" class="form-control" id="contentInput" name="content" required></textarea>
+                <textarea type="text" class="form-control" id="contentInput" name="content" required rows="5" placeholder="Enter some details about your issue"></textarea>
             </div>
             <p id="ticketFormInfo"></p>
             <div style="flex-basis: 100%;">
@@ -25,6 +25,7 @@
 <script>
     const ticketFormInfo = document.getElementById("ticketFormInfo");
     const createTicketSpinner = document.getElementById("createTicketSpinner");
+    const createTicketButton = document.querySelector("#createTicketForm button[type='submit']");
 
     document.getElementById('createTicketForm').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -46,6 +47,7 @@
         }
 
         createTicketSpinner.style.display = "inline-block";
+        createTicketButton.disabled = true; 
 
         const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
         fetch("/tickets", {
@@ -55,7 +57,6 @@
                 "Content-Type": "application/json"
             },
         }).then(response => {
-            createTicketSpinner.style.display = "none";
             if (response.ok) {
                 location.replace("{{ page }}")
             }
@@ -68,8 +69,10 @@
                 });
             }
         }).catch(error => {
-            createTicketSpinner.style.display = "none";
             console.log(error)
-        })
+        }).finally(() => {
+            createTicketSpinner.style.display = "none";
+            createTicketButton.disabled = false; 
+        });
     });
 </script>

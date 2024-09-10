@@ -20,7 +20,9 @@
     {% include "/components/navbar.html" %}
     <div id="content" style="padding: 20px">{% block content %}{% endblock %}</div>
     <div id="footer" style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--secondary); text-align: center;">
-        {% block footer %}Footer{% endblock %}
+        {% block footer %}
+            © Thomas M - 2024
+        {% endblock %}
     </div>
     <div id="modals">
         {% block modals %}
