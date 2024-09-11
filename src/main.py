@@ -6,25 +6,12 @@ from src.routers import ticket_router, page_router, user_router, auth_session_ro
 from src.dependencies.auth_dependencies import AuthRedirect
 from src.handlers import auth_redirect_handler
 from fastapi_health import health
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-
-# origins = ["http://127.0.0.1:8000","http://localhost:8000"]
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"], # include additional methods as per the application demand
-#     allow_headers=["Content-Type","Set-Cookie"], # include additional headers as per the application demand
-#     expose_headers=["Set-Cookie"],
-# )
 
 templates = Jinja2Templates(directory="templates")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
 app.include_router(page_router.router)
 app.include_router(prefix="/tickets", router=ticket_router.router)
 app.include_router(prefix="/users", router=user_router.router)
