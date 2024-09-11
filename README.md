@@ -33,3 +33,14 @@ Note: To run all of the below commands, first **ensure you're in the src directo
 
 1. To run the project in development mode, execute the command `fastapi dev main.py`
 2. To run the pytests, execute the command `pytest`
+
+## Pages 
+
+To navigate to each page manually, prepend either http://localhost:8000 or https://sea-programming-project.onrender.com to the following: 
+
+1. Home - "/"
+2. My Tickets - "/my-tickets-page"
+3. Manage Users - "/admin-dashboard-page"
+4. View Ticket - "/view-ticket-page/{ticket_id}"
+5. **Swagger Docs = "/docs"** 
+
