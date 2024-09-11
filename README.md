@@ -36,7 +36,7 @@ Note: To run all of the below commands, first **ensure you're in the src directo
 
 ## Pages 
 
-To navigate to each page manually, prepend either http://localhost:8000 or https://sea-programming-project.onrender.com to the following: 
+To navigate to each page manually, prepend either http://localhost:8000 or https://sea-programming-project.onrender.com depending on the environment to the following: 
 
 1. Home - "/"
 2. My Tickets - "/my-tickets-page"
